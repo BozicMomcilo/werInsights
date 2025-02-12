@@ -10,5 +10,20 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="module">
+        import { supabase } from './supabaseClient.js';
+
+        // Example: Fetch data from a table
+        async function fetchData() {
+            let { data, error } = await supabase
+                .from('your_table_name')
+                .select('*')
+
+            if (error) console.error(error)
+            else console.log(data)
+        }
+
+        fetchData();
+    </script>
   </body>
 </html>
