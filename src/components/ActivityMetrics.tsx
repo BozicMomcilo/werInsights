@@ -102,9 +102,9 @@ export const ActivityMetrics: React.FC = () => {
 
   return (
     <div className="glass-panel p-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-center mb-6">
         <h2 className="section-title">Activity & Engagement: Deal Interaction Metrics</h2>
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-wrap gap-2">
           {/* Time Period Filter */}
           <div className="glass-panel px-4 py-2 flex items-center space-x-2">
             <Clock className="w-4 h-4" />
@@ -145,7 +145,7 @@ export const ActivityMetrics: React.FC = () => {
       </div>
 
       {/* Metrics Summary */}
-      <div className="flex items-center space-x-6 mb-6 text-sm">
+      <div className="flex flex-wrap gap-4 mb-6">
         <div className="glass-panel px-4 py-2">
           <span className="text-[#B0B3BA]">Average Interactions:</span>
           <span className="ml-2 text-[#FFE8AC] font-medium">{getAverageClicks()}</span>
