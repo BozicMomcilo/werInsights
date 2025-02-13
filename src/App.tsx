@@ -23,6 +23,7 @@ import { EventOverviewMetrics } from './components/EventOverviewMetrics';
 import { EventsOverview } from './components/EventsOverview';
 import { MembersOverviewMetrics } from './components/MembersOverviewMetrics';
 import { MembersOverviewTable } from './components/MembersOverviewTable';
+import { MemberActivityChart } from './components/MemberActivityChart';
 import { ContentOverviewMetrics } from './components/ContentOverviewMetrics';
 import { ContentOverviewTable } from './components/ContentOverviewTable';
 import { EngagementOverviewMetrics } from './components/EngagementOverviewMetrics';
@@ -51,6 +52,7 @@ function App() {
           <div className="space-y-8">
             <MembersOverviewMetrics />
             <MembersOverviewTable />
+            <MemberActivityChart />
           </div>
         );
       case 'deals':
