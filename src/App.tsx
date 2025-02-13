@@ -21,6 +21,12 @@ import { ActivityMetrics } from './components/ActivityMetrics';
 import { EventParticipationChart } from './components/EventParticipationChart';
 import { EventOverviewMetrics } from './components/EventOverviewMetrics';
 import { EventsOverview } from './components/EventsOverview';
+import { MembersOverviewMetrics } from './components/MembersOverviewMetrics';
+import { MembersOverviewTable } from './components/MembersOverviewTable';
+import { ContentOverviewMetrics } from './components/ContentOverviewMetrics';
+import { ContentOverviewTable } from './components/ContentOverviewTable';
+import { EngagementOverviewMetrics } from './components/EngagementOverviewMetrics';
+import { EngagementOverviewTable } from './components/EngagementOverviewTable';
 
 const navItems = [
   { icon: LineChart, label: 'Insights', active: true },
@@ -40,6 +46,13 @@ function App() {
     switch (activeTab) {
       case 'key-metrics':
         return <KeyMetrics />;
+      case 'members':
+        return (
+          <div className="space-y-8">
+            <MembersOverviewMetrics />
+            <MembersOverviewTable />
+          </div>
+        );
       case 'deals':
         return (
           <div className="space-y-8">
@@ -56,10 +69,18 @@ function App() {
             <EventParticipationChart />
           </div>
         );
+      case 'content':
+        return (
+          <div className="space-y-8">
+            <ContentOverviewMetrics />
+            <ContentOverviewTable />
+          </div>
+        );
       case 'engagement':
         return (
-          <div className="text-center py-12 text-[#B0B3BA]">
-            Engagement metrics have been moved to the Deals tab
+          <div className="space-y-8">
+            <EngagementOverviewMetrics />
+            <EngagementOverviewTable />
           </div>
         );
       default:
