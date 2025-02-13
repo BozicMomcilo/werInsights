@@ -83,95 +83,99 @@ export const MembersOverviewTable: React.FC = () => {
   });
 
   return (
-    <div className="glass-panel p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="section-title">Members Overview</h2>
-        <div className="flex items-center space-x-4">
-          <div className="glass-panel px-4 py-2 flex items-center space-x-2">
-            <Calendar className="w-4 h-4" />
-            <select
-              value={filters.period}
-              onChange={(e) => setFilters(prev => ({ ...prev, period: e.target.value }))}
-              className="bg-transparent border-none text-sm focus:outline-none"
-            >
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="quarter">This Quarter</option>
-            </select>
-          </div>
-          <div className="glass-panel px-4 py-2 flex items-center space-x-2">
-            <Filter className="w-4 h-4" />
-            <select
-              value={filters.status}
-              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-              className="bg-transparent border-none text-sm focus:outline-none"
-            >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="pending">Pending</option>
-            </select>
-          </div>
-          <div className="glass-panel px-4 py-2 flex items-center space-x-2">
-            <Filter className="w-4 h-4" />
-            <select
-              value={filters.tier}
-              onChange={(e) => setFilters(prev => ({ ...prev, tier: e.target.value }))}
-              className="bg-transparent border-none text-sm focus:outline-none"
-            >
-              <option value="all">All Tiers</option>
-              <option value="platinum">Platinum</option>
-              <option value="gold">Gold</option>
-              <option value="silver">Silver</option>
-            </select>
+    <div className="space-y-8">
+      <div className="glass-panel p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="section-title">Members Overview</h2>
+          <div className="flex items-center space-x-4">
+            <div className="glass-panel px-4 py-2 flex items-center space-x-2">
+              <Calendar className="w-4 h-4" />
+              <select
+                value={filters.period}
+                onChange={(e) => setFilters(prev => ({ ...prev, period: e.target.value }))}
+                className="bg-transparent border-none text-sm focus:outline-none"
+              >
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+              </select>
+            </div>
+            <div className="glass-panel px-4 py-2 flex items-center space-x-2">
+              <Filter className="w-4 h-4" />
+              <select
+                value={filters.status}
+                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                className="bg-transparent border-none text-sm focus:outline-none"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="pending">Pending</option>
+              </select>
+            </div>
+            <div className="glass-panel px-4 py-2 flex items-center space-x-2">
+              <Filter className="w-4 h-4" />
+              <select
+                value={filters.tier}
+                onChange={(e) => setFilters(prev => ({ ...prev, tier: e.target.value }))}
+                className="bg-transparent border-none text-sm focus:outline-none"
+              >
+                <option value="all">All Tiers</option>
+                <option value="platinum">Platinum</option>
+                <option value="gold">Gold</option>
+                <option value="silver">Silver</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <table className="w-full">
-        <thead>
-          <tr className="text-[#B0B3BA] text-sm font-medium">
-            <th className="text-left pb-4">Full name</th>
-            <th className="text-left pb-4">Company</th>
-            <th className="text-left pb-4">Status</th>
-            <th className="text-left pb-4">Investment Tier</th>
-            <th className="text-left pb-4">Last Activity</th>
-          </tr>
-        </thead>
-        <tbody className="font-light">
-          {members.map((member) => (
-            <tr 
-              key={member.id} 
-              className="border-t border-white/5 hover:bg-[#72A0D6]/5 transition-colors"
-            >
-              <td className="py-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white/10">
-                    <img 
-                      src={member.image} 
-                      alt={member.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <span>{member.name}</span>
-                </div>
-              </td>
-              <td className="py-4">{member.company}</td>
-              <td className="py-4">
-                <span className={`${getStatusColor(member.membership_status)} font-medium`}>
-                  {member.membership_status}
-                </span>
-              </td>
-              <td className="py-4">
-                <span className={`${getTierColor(member.investment_tier)} font-medium`}>
-                  {member.investment_tier}
-                </span>
-              </td>
-              <td className="py-4">{member.last_activity}</td>
+        
+        <table className="w-full">
+          <thead>
+            <tr className="text-[#B0B3BA] text-sm font-medium">
+              <th className="text-left pb-4">Full name</th>
+              <th className="text-left pb-4">Company</th>
+              <th className="text-left pb-4">Status</th>
+              <th className="text-left pb-4">Investment Tier</th>
+              <th className="text-left pb-4">Last Activity</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="font-light">
+            {members.map((member) => (
+              <tr 
+                key={member.id} 
+                className="border-t border-white/5 hover:bg-[#72A0D6]/5 transition-colors"
+              >
+                <td className="py-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white/10">
+                      <img 
+                        src={member.image} 
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <span>{member.name}</span>
+                  </div>
+                </td>
+                <td className="py-4">{member.company}</td>
+                <td className="py-4">
+                  <span className={`${getStatusColor(member.membership_status)} font-medium`}>
+                    {member.membership_status}
+                  </span>
+                </td>
+                <td className="py-4">
+                  <span className={`${getTierColor(member.investment_tier)} font-medium`}>
+                    {member.investment_tier}
+                  </span>
+                </td>
+                <td className="py-4">{member.last_activity}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Add Member Distribution Map */}
     </div>
-  );
+  )
 };
