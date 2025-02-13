@@ -1,61 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Filter, ChevronDown, Calendar, ArrowUpRight, Clock } from 'lucide-react';
+import { supabase } from './supabase/supabaseClient';
 
 const deals = [
-  { 
-    id: 1, 
-    name: 'Alexander Emerson', 
-    date: 'January 17, 2025', 
-    tickets: 2, 
-    type: 'Living', 
+  {
+    id: 1,
+    name: 'Alexander Emerson',
+    date: 'January 17, 2025',
+    tickets: 2,
+    type: 'Living',
     capital: '2M',
     status: 'Active',
     sector: 'Tech',
     performance: '+12.5%',
     image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&h=160&q=80&fit=crop'
   },
-  { 
-    id: 2, 
-    name: 'Dominique Baptiste', 
-    date: 'January 16, 2025', 
-    tickets: 1, 
-    type: 'Living', 
+  {
+    id: 2,
+    name: 'Dominique Baptiste',
+    date: 'January 16, 2025',
+    tickets: 1,
+    type: 'Living',
     capital: '2M',
     status: 'Pending',
     sector: 'Life',
     performance: '+8.3%',
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&h=160&q=80&fit=crop'
   },
-  { 
-    id: 3, 
-    name: 'Elizabeth Scott', 
-    date: 'January 16, 2025', 
-    tickets: 1, 
-    type: 'Living', 
+  {
+    id: 3,
+    name: 'Elizabeth Scott',
+    date: 'January 16, 2025',
+    tickets: 1,
+    type: 'Living',
     capital: '2M',
     status: 'Active',
     sector: 'Resilience',
     performance: '+15.7%',
     image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=160&h=160&q=80&fit=crop'
   },
-  { 
-    id: 4, 
-    name: 'Gloria Atamna', 
-    date: 'January 15, 2025', 
-    tickets: 2, 
-    type: 'Living', 
+  {
+    id: 4,
+    name: 'Gloria Atamna',
+    date: 'January 15, 2025',
+    tickets: 2,
+    type: 'Living',
     capital: '2M',
     status: 'Closed',
     sector: 'Tech',
     performance: '+21.2%',
     image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=160&h=160&q=80&fit=crop'
   },
-  { 
-    id: 5, 
-    name: 'Giselle Burch', 
-    date: 'January 15, 2025', 
-    tickets: 1, 
-    type: 'Living', 
+  {
+    id: 5,
+    name: 'Giselle Burch',
+    date: 'January 15, 2025',
+    tickets: 1,
+    type: 'Living',
     capital: '2M',
     status: 'Active',
     sector: 'Life',
@@ -97,7 +98,45 @@ export const DealsOverview: React.FC = () => {
     period: 'month'
   });
 
-  const MetricCard = ({ title, value, change, icon: Icon }) => (
+  const [totalDeals, setTotalDeals] = useState(0);
+  const [averageMaximumRaiseSize, setTotalMaximumRaiseSize] = useState(0);
+
+
+  useEffect(() => {
+    const fetchDeals = async () => {
+      const { data, error } = await supabase
+        .from('item')// Replace with your actual table name
+        .select('*')
+        .eq('type', 'Deal');
+
+      if (error) {
+        console.error('Error fetching deals:', error);
+      } else {
+        setTotalDeals(data.length);
+        console.log(data);
+        let tempTotalMaximumRaiseSize = 0;
+        for (let index = 0; index < data.length; index++) {
+          if (data[index]['maximum_raise'] != null) {
+            tempTotalMaximumRaiseSize += data[index]['maximum_raise'];
+
+            setTotalMaximumRaiseSize(tempTotalMaximumRaiseSize / data.length);
+          }
+
+        }
+      }
+    };
+
+    fetchDeals();
+  }, []);
+
+  interface MetricCardProps {
+    title: string;
+    value: string;
+    change: string;
+    icon: React.ElementType;
+  }
+
+  const MetricCard = ({ title, value, change, icon: Icon }: MetricCardProps) => (
     <div className="glass-panel p-6">
       <div className="flex justify-between items-start mb-4">
         <div>
@@ -119,21 +158,21 @@ export const DealsOverview: React.FC = () => {
     <div className="space-y-8">
       {/* Deal Metrics */}
       <div className="grid grid-cols-3 gap-6">
-        <MetricCard 
-          title="Total Deals" 
-          value="13" 
+        <MetricCard
+          title="Total Deals"
+          value={totalDeals.toString()}
           change="32.7"
           icon={ArrowUpRight}
         />
-        <MetricCard 
-          title="Average Deal Size" 
-          value="1.8M" 
+        <MetricCard
+          title="Average Deal Size"
+          value={`${(averageMaximumRaiseSize / 1000000).toFixed(2)}M`}
           change="15.4"
           icon={ArrowUpRight}
         />
-        <MetricCard 
-          title="Time to Close" 
-          value="18 Days" 
+        <MetricCard
+          title="Time to Close"
+          value="18 Days"
           change="-8.3"
           icon={Clock}
         />
@@ -184,7 +223,7 @@ export const DealsOverview: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         <table className="w-full">
           <thead>
             <tr className="text-[#B0B3BA] text-sm font-medium">
@@ -202,8 +241,8 @@ export const DealsOverview: React.FC = () => {
                 <td className="py-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white/10 hover:ring-[#72A0D6]/30 transition-all duration-300">
-                      <img 
-                        src={deal.image} 
+                      <img
+                        src={deal.image}
                         alt={deal.name}
                         className="w-full h-full object-cover"
                       />
