@@ -26,8 +26,10 @@ import { MembersOverviewTable } from './components/MembersOverviewTable';
 import { MemberActivityChart } from './components/MemberActivityChart';
 import { ContentOverviewMetrics } from './components/ContentOverviewMetrics';
 import { ContentOverviewTable } from './components/ContentOverviewTable';
+import { ContentEngagementChart } from './components/ContentEngagementChart';
 import { EngagementOverviewMetrics } from './components/EngagementOverviewMetrics';
 import { EngagementOverviewTable } from './components/EngagementOverviewTable';
+import { EngagementTimeline } from './components/EngagementTimeline';
 
 const navItems = [
   { icon: LineChart, label: 'Insights', active: true },
@@ -78,6 +80,7 @@ function App() {
           <div className="space-y-8">
             <ContentOverviewMetrics />
             <ContentOverviewTable />
+            <ContentEngagementChart />
           </div>
         );
       case 'engagement':
@@ -85,6 +88,7 @@ function App() {
           <div className="space-y-8">
             <EngagementOverviewMetrics />
             <EngagementOverviewTable />
+            <EngagementTimeline />
           </div>
         );
       default:

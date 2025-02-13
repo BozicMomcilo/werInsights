@@ -68,6 +68,44 @@ export const MemberActivityChart: React.FC = () => {
     ((lastWeekActivity - firstWeekActivity) / firstWeekActivity) * 100
   );
 
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length > 0) {
+      const data = payload[0].payload;
+      return (
+        <div className="!bg-[#0A101A] !border-white/10 !rounded-xl !border !backdrop-blur-lg p-4 min-w-[200px] shadow-2xl">
+          <div className="font-medium mb-2">{label}</div>
+          <div className="space-y-2">
+            <div>
+              <div className="text-[#B0B3BA] text-xs">Total Activity</div>
+              <div className="text-[#FFE8AC] font-medium">{data.totalActivity}</div>
+            </div>
+            <div className="pt-2 border-t border-white/10">
+              <div className="grid gap-2">
+                <div>
+                  <div className="text-[#B0B3BA] text-xs">Deal Interactions</div>
+                  <div className="text-white">{data.dealInteractions}</div>
+                </div>
+                <div>
+                  <div className="text-[#B0B3BA] text-xs">Document Views</div>
+                  <div className="text-white">{data.documentViews}</div>
+                </div>
+                <div>
+                  <div className="text-[#B0B3BA] text-xs">Comments</div>
+                  <div className="text-white">{data.comments}</div>
+                </div>
+                <div>
+                  <div className="text-[#B0B3BA] text-xs">Event Participations</div>
+                  <div className="text-white">{data.eventParticipations}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="glass-panel p-6 mt-8">
       <div className="flex justify-between items-center mb-6">
@@ -138,14 +176,13 @@ export const MemberActivityChart: React.FC = () => {
               tickLine={false}
               axisLine={false}
             />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: '#0A101A',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+            <Tooltip 
+              content={<CustomTooltip />}
+              cursor={{ 
+                stroke: 'rgba(114, 160, 214, 0.1)',
+                strokeWidth: 2,
+                fill: 'rgba(114, 160, 214, 0.05)'
               }}
-              labelStyle={{ color: '#EAEAEA' }}
             />
             <Area
               type="monotone"
@@ -153,6 +190,7 @@ export const MemberActivityChart: React.FC = () => {
               stroke="#72A0D6"
               fill="url(#totalActivity)"
               strokeWidth={2}
+              className="transition-all duration-300 hover:opacity-80"
             />
           </AreaChart>
         </ResponsiveContainer>
