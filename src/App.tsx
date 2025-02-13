@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   LineChart, 
   MessageCircle, 
@@ -6,12 +6,7 @@ import {
   Layers,
   Settings,
   LayoutDashboard,
-  ChevronDown,
-  Filter,
-  Calendar,
-  ArrowUpRight,
-  ArrowDownRight,
-  Clock
+
 } from 'lucide-react';
 import { Logo } from './components/Logo';
 import { RegionalInvestmentChart } from './components/RegionalInvestmentChart';

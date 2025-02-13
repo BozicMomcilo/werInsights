@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Calendar, Filter } from 'lucide-react';
-import { MemberDistributionMap } from './MemberDistributionMap';
 
 const members = [
   {
@@ -177,7 +176,6 @@ export const MembersOverviewTable: React.FC = () => {
       </div>
 
       {/* Add Member Distribution Map */}
-      <MemberDistributionMap />
     </div>
-  );
+  )
 };
