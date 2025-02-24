@@ -144,6 +144,9 @@ export const DealsOverview: React.FC = () => {
 
     fetchDeals();
   }, []);
+      
+  
+  //TODO: Connect with real data about deals - Extract to another component called DealMetrics
 
   return (
     <div className="space-y-8">
@@ -152,7 +155,6 @@ export const DealsOverview: React.FC = () => {
           {error}
         </div>
       )}
-      
       {/* Deal Metrics */}
       <div className="grid grid-cols-3 gap-6">
         <MetricCard
@@ -162,13 +164,13 @@ export const DealsOverview: React.FC = () => {
           icon={ArrowUpRight}
         />
         <MetricCard
-          title="Average Deal Size"
+          title="Total Active Deals"
           value={`${(averageMaximumRaiseSize / 1000000).toFixed(2)}M`}
           change="15.4"
           icon={ArrowUpRight}
         />
         <MetricCard
-          title="Time to Close"
+          title="Total committed volume"
           value="18 Days"
           change="-8.3"
           icon={Clock}

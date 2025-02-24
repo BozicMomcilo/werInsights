@@ -1,6 +1,8 @@
 import React from 'react';
 import { Users, Activity, UserPlus } from 'lucide-react';
 import { MetricCard } from '../shared/MetricCard';
+      
+//TODO: Connect with real data about members
 
 export const MembersOverviewMetrics: React.FC = () => {
   return (
@@ -22,7 +24,7 @@ export const MembersOverviewMetrics: React.FC = () => {
         trend="up"
       />
       <MetricCard 
-        title="New Members"
+        title="Pending Members"
         value="124"
         change="+15"
         description="Recently joined members in the last month"

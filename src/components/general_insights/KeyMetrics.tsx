@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
-const MetricCard = ({ title, value, change, sparkline }) => (
+const MetricCard = ({ title, value, change, sparkline }: { title: string, value: string, change: string, sparkline: string }) => (
   <div className="metric-card">
     <div className="flex justify-between items-start mb-4">
       <div>
