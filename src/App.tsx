@@ -13,7 +13,6 @@ import { MembersOverviewMetrics } from './components/members_insights/MembersOve
 import { EventOverviewMetrics } from './components/events_insights/EventOverviewMetrics';
 import { DealsOverview } from './components/deal_insights/DealsOverview';
 import { EventsOverview } from './components/events_insights/EventsOverview';
-import { EventParticipationChart } from './components/events_insights/EventParticipationChart';
 import { EventDetails } from './components/events_insights/EventDetails';
 import { ContentOverviewMetrics } from './components/content_insights/ContentOverviewMetrics';
 import { ContentOverviewTable } from './components/content_insights/ContentOverviewTable';
@@ -62,7 +61,6 @@ function App() {
               <div className="space-y-8">
                 <EventOverviewMetrics />
                 <EventsOverview />
-                <EventParticipationChart />
               </div>
             } />
             <Route path="/events/:id" element={<EventDetails />} />

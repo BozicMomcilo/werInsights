@@ -6,7 +6,6 @@ import { MemberActivityChart } from "../../members_insights/MemberActivityChart"
 import { DealsOverview } from "../../deal_insights/DealsOverview";
 import { EventOverviewMetrics } from "../../events_insights/EventOverviewMetrics";
 import { EventsOverview } from "../../events_insights/EventsOverview";
-import { EventParticipationChart } from "../../events_insights/EventParticipationChart";
 import { ContentOverviewMetrics } from "../../content_insights/ContentOverviewMetrics";
 import { ContentOverviewTable } from "../../content_insights/ContentOverviewTable";
 import { ContentEngagementChart } from "../../content_insights/ContentEngagementChart";
@@ -54,7 +53,6 @@ export function Dashboard() {
             <div className="space-y-8">
               <EventOverviewMetrics />
               <EventsOverview />
-              <EventParticipationChart />
             </div>
           );
         case 'content':
