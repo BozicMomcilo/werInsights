@@ -1,6 +1,6 @@
 import React from 'react';
 import { Activity, Users, Star } from 'lucide-react';
-import { MetricCard } from './MetricCard';
+import { MetricCard } from '../shared/MetricCard';
 
 export const EngagementOverviewMetrics: React.FC = () => {
   return (

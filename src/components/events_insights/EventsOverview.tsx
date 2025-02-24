@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Filter, ChevronDown } from 'lucide-react';
+import { Calendar, Filter, } from 'lucide-react';
 
 const attendees = [
   {
