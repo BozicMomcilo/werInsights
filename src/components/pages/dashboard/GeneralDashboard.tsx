@@ -4,8 +4,6 @@ import { MembersOverviewTable } from "../../members_insights/MembersOverviewTabl
 import { MembersOverviewMetrics } from "../../members_insights/MembersOverviewMetrics";
 import { MemberActivityChart } from "../../members_insights/MemberActivityChart";
 import { DealsOverview } from "../../deal_insights/DealsOverview";
-import { ActivityMetrics } from "../../general_insights/ActivityMetrics";
-import { RegionalInvestmentChart } from "../../deal_insights/RegionalInvestmentChart";
 import { EventOverviewMetrics } from "../../events_insights/EventOverviewMetrics";
 import { EventsOverview } from "../../events_insights/EventsOverview";
 import { EventParticipationChart } from "../../events_insights/EventParticipationChart";
@@ -49,10 +47,6 @@ export function Dashboard() {
           return (
             <div className="space-y-8">
               <DealsOverview />
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <ActivityMetrics />
-                <RegionalInvestmentChart />
-              </div>
             </div>
           );
         case 'events':

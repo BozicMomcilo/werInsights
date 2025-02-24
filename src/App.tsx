@@ -6,12 +6,10 @@ import {
   FileText,
   Activity
 } from 'lucide-react';
-import { RegionalInvestmentChart } from './components/deal_insights/RegionalInvestmentChart';
 import { KeyMetrics } from './components/general_insights/KeyMetrics';
 import { MembersOverviewTable } from './components/members_insights/MembersOverviewTable';
 import { MembersOverviewMetrics } from './components/members_insights/MembersOverviewMetrics';
 import { EventOverviewMetrics } from './components/events_insights/EventOverviewMetrics';
-import { ActivityMetrics } from './components/general_insights/ActivityMetrics';
 import { DealsOverview } from './components/deal_insights/DealsOverview';
 import { EventsOverview } from './components/events_insights/EventsOverview';
 import { EventParticipationChart } from './components/events_insights/EventParticipationChart';
@@ -53,10 +51,6 @@ function App() {
         return (
           <div className="space-y-8">
             <DealsOverview />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <ActivityMetrics />
-              <RegionalInvestmentChart />
-            </div>
           </div>
         );
       case 'events':
