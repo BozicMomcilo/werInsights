@@ -1,6 +1,6 @@
 import React from 'react';
 import { FileText, PlayCircle, Star } from 'lucide-react';
-import { MetricCard } from './MetricCard';
+import { MetricCard } from '../shared/MetricCard';
 
 export const ContentOverviewMetrics: React.FC = () => {
   return (

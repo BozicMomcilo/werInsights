@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, Users, CheckCircle,} from 'lucide-react';
-import { MetricCard } from './MetricCard';
+import { MetricCard } from '../shared/MetricCard';
 
 export const EventOverviewMetrics: React.FC = () => {
   return (

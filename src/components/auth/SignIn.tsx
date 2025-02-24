@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { auth } from '../lib/auth'
-import { Logo } from './Logo'
+import { auth } from '../../lib/auth'
+import { Logo } from '../shared/Logo'
 import { Mail, Lock, Loader } from 'lucide-react'
 
 export const SignIn = () => {
@@ -36,7 +36,7 @@ export const SignIn = () => {
       await auth.signIn(formData.email, formData.password)
       navigate('/')
     } catch (err) {
-      setError(err.message)
+      setError(err instanceof Error ? err.message : 'An unknown error occurred')
     } finally {
       setIsLoading(false)
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Filter, Calendar, ArrowUpRight, Clock } from 'lucide-react';
-import { supabase } from './supabase/supabaseClient';
-import { MetricCard } from './MetricCard';
+import { supabase } from '../../lib/supabase/supabaseClient';
+import { MetricCard } from '../shared/MetricCard';
 
 const deals = [
   {

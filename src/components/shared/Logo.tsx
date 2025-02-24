@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const Logo = () => (
   <div className="w-12 h-12 flex items-center justify-center transition-all duration-300 hover:scale-105">
     <svg width="48" height="48" viewBox="0 0 240 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="transition-all duration-300">

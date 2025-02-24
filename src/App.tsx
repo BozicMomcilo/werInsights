@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { SignIn } from './components/SignIn';
+import { SignIn } from './components/auth/SignIn';
 import { auth } from './lib/auth';
 import { 
   LineChart, 
@@ -10,23 +10,23 @@ import {
   Settings,
   LayoutDashboard,
 } from 'lucide-react';
-import { Logo } from './components/Logo';
+import { Logo } from './components/shared/Logo';
 import { RegionalInvestmentChart } from './components/RegionalInvestmentChart';
-import { DealsOverview } from './components/DealsOverview';
-import { KeyMetrics } from './components/KeyMetrics';
-import { ActivityMetrics } from './components/ActivityMetrics';
-import { EventParticipationChart } from './components/EventParticipationChart';
-import { EventOverviewMetrics } from './components/EventOverviewMetrics';
-import { EventsOverview } from './components/EventsOverview';
-import { MembersOverviewMetrics } from './components/MembersOverviewMetrics';
-import { MembersOverviewTable } from './components/MembersOverviewTable';
-import { MemberActivityChart } from './components/MemberActivityChart';
-import { ContentOverviewMetrics } from './components/ContentOverviewMetrics';
-import { ContentOverviewTable } from './components/ContentOverviewTable';
-import { ContentEngagementChart } from './components/ContentEngagementChart';
-import { EngagementOverviewMetrics } from './components/EngagementOverviewMetrics';
-import { EngagementOverviewTable } from './components/EngagementOverviewTable';
-import { EngagementTimeline } from './components/EngagementTimeline';
+import { DealsOverview } from './components/deal_insights/DealsOverview';
+import { KeyMetrics } from './components/general_insights/KeyMetrics';
+import { ActivityMetrics } from './components/general_insights/ActivityMetrics';
+import { EventParticipationChart } from './components/events_insights/EventParticipationChart';
+import { EventOverviewMetrics } from './components/events_insights/EventOverviewMetrics';
+import { EventsOverview } from './components/events_insights/EventsOverview';
+import { MembersOverviewMetrics } from './components/members_insights/MembersOverviewMetrics';
+import { MembersOverviewTable } from './components/members_insights/MembersOverviewTable';
+import { MemberActivityChart } from './components/members_insights/MemberActivityChart';
+import { ContentOverviewMetrics } from './components/content_insights/ContentOverviewMetrics';
+import { ContentOverviewTable } from './components/content_insights/ContentOverviewTable';
+import { ContentEngagementChart } from './components/content_insights/ContentEngagementChart';
+import { EngagementOverviewMetrics } from './components/engagement_insights/EngagementOverviewMetrics';
+import { EngagementOverviewTable } from './components/engagement_insights/EngagementOverviewTable';
+import { EngagementTimeline } from './components/engagement_insights/EngagementTimeline';
 
 const navItems = [
   { icon: LineChart, label: 'Insights', active: true },
@@ -191,10 +191,12 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return isAuthenticated ? <>{children}</> : <Navigate to="/signin" />;
 }
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Redirect root to signin */}
+        <Route path="/" element={<Navigate to="/signin" replace />} />
         <Route path="/signin" element={<SignIn />} />
         <Route
           path="/*"
@@ -208,5 +210,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { supabaseApi } from '../lib/supabase'
+import { supabase } from './supabaseClient'
 
-export const TestConnection = () => {
+export default function TestConnection() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [data, setData] = useState<any[] | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -13,11 +13,11 @@ export const TestConnection = () => {
   const testConnection = async () => {
     try {
       // Try to fetch data from a table (replace 'your_table' with an actual table name)
-      const result = await supabaseApi.getAll('your_table')
-      setData(result)
+      const result = await supabase.from('person').select('*')
+      setData(result.data)
       setStatus('success')
     } catch (err) {
-      setError(err.message)
+      setError(err instanceof Error ? err.message : 'An unknown error occurred')
       setStatus('error')
     }
   }
