@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Filter, Calendar, ArrowUpRight, Clock } from 'lucide-react';
-import { supabase } from '../../lib/supabase/supabaseClient';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase/supabaseClient';
 import { MetricCard } from '../shared/MetricCard';
 
 const deals = [
@@ -100,39 +100,59 @@ export const DealsOverview: React.FC = () => {
   });
 
   const [totalDeals, setTotalDeals] = useState(0);
-  const [averageMaximumRaiseSize, setTotalMaximumRaiseSize] = useState(0);
-
+  const [averageMaximumRaiseSize, setAverageMaximumRaiseSize] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDeals = async () => {
-      const { data, error } = await supabase
-        .from('item')// Replace with your actual table name
-        .select('*')
-        .eq('type', 'Deal');
+      if (!isSupabaseConfigured()) {
+        setError('Supabase is not configured. Please connect your Supabase project first.');
+        return;
+      }
 
-      if (error) {
-        console.error('Error fetching deals:', error);
-      } else {
-        setTotalDeals(data.length);
-        console.log(data);
-        let tempTotalMaximumRaiseSize = 0;
-        for (let index = 0; index < data.length; index++) {
-          if (data[index]['maximum_raise'] != null) {
-            tempTotalMaximumRaiseSize += data[index]['maximum_raise'];
+      try {
+        const { data, error: supabaseError } = await supabase!
+          .from('item')
+          .select('*')
+          .eq('type', 'Deal');
 
-            setTotalMaximumRaiseSize(tempTotalMaximumRaiseSize / data.length);
-          }
-
+        if (supabaseError) {
+          throw supabaseError;
         }
+
+        if (data) {
+          setTotalDeals(data.length);
+          let totalMaximumRaiseSize = 0;
+          let validRaiseSizeCount = 0;
+
+          data.forEach(item => {
+            if (item.maximum_raise != null) {
+              totalMaximumRaiseSize += item.maximum_raise;
+              validRaiseSizeCount++;
+            }
+          });
+
+          setAverageMaximumRaiseSize(
+            validRaiseSizeCount > 0 ? totalMaximumRaiseSize / validRaiseSizeCount : 0
+          );
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred while fetching deals');
+        console.error('Error fetching deals:', err);
       }
     };
 
     fetchDeals();
   }, []);
 
-
   return (
     <div className="space-y-8">
+      {error && (
+        <div className="glass-panel p-4 text-[#FF3B3B] bg-[#FF3B3B]/10">
+          {error}
+        </div>
+      )}
+      
       {/* Deal Metrics */}
       <div className="grid grid-cols-3 gap-6">
         <MetricCard
