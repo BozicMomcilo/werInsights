@@ -144,7 +144,7 @@ export const DealsOverview: React.FC = () => {
           {error}
         </div>
       )}
-      
+
       {/* Deal Metrics */}
       <div className="grid grid-cols-3 gap-6">
         <MetricCard
@@ -166,9 +166,6 @@ export const DealsOverview: React.FC = () => {
           icon={Clock}
         />
       </div>
-
-      {/* Monthly Commitment Chart */}
-      <MonthlyCommitmentChart />
 
       {/* Deals Table */}
       <div className="glass-panel p-6">
@@ -264,9 +261,8 @@ export const DealsOverview: React.FC = () => {
               <button
                 key={number}
                 onClick={() => handlePageChange(number)}
-                className={`glass-panel px-4 py-2 ${
-                  currentPage === number ? 'bg-[#72A0D6]/20 text-white' : 'text-[#B0B3BA]'
-                } button-hover`}
+                className={`glass-panel px-4 py-2 ${currentPage === number ? 'bg-[#72A0D6]/20 text-white' : 'text-[#B0B3BA]'
+                  } button-hover`}
               >
                 {number}
               </button>
@@ -281,6 +277,8 @@ export const DealsOverview: React.FC = () => {
           </div>
         </div>
       </div>
+      {/* Monthly Commitment Chart */}
+      <MonthlyCommitmentChart />
     </div>
   );
 };
