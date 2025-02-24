@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { auth } from '../../lib/auth'
-import { Logo } from '../shared/Logo'
+import { auth } from '../../../lib/auth'
+import { Logo } from '../../shared/Logo'
 import { Mail, Lock, Loader } from 'lucide-react'
-import { isSupabaseConfigured } from '../../lib/supabase/supabaseClient'
+import { isSupabaseConfigured } from '../../../lib/supabase/supabaseClient'
 
 export const SignIn = () => {
   const navigate = useNavigate()
