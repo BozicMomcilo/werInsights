@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Filter, Calendar, ArrowUpRight, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/supabaseClient';
 import { MetricCard } from '../shared/MetricCard';
 import { MonthlyCommitmentChart } from './MonthlyCommitmentChart';
@@ -76,15 +77,8 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
-};
-
 export const DealsOverview: React.FC = () => {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     status: 'all',
     period: 'month'
@@ -105,6 +99,10 @@ export const DealsOverview: React.FC = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleDealClick = (dealId: number) => {
+    navigate(`/deals/${dealId}`);
   };
 
   useEffect(() => {
@@ -215,7 +213,11 @@ export const DealsOverview: React.FC = () => {
             </thead>
             <tbody className="font-light">
               {currentDeals.map((deal) => (
-                <tr key={deal.id} className="border-t border-white/5 hover:bg-[#72A0D6]/5 transition-colors">
+                <tr 
+                  key={deal.id} 
+                  className="border-t border-white/5 hover:bg-[#72A0D6]/5 transition-colors cursor-pointer"
+                  onClick={() => handleDealClick(deal.id)}
+                >
                   <td className="py-4">
                     <div className="flex items-center space-x-3">
                       <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white/10 hover:ring-[#72A0D6]/30 transition-all duration-300">
@@ -233,7 +235,7 @@ export const DealsOverview: React.FC = () => {
                       {deal.status}
                     </span>
                   </td>
-                  <td className="py-4 whitespace-nowrap">{formatDate(deal.dueDate)}</td>
+                  <td className="py-4 whitespace-nowrap">{deal.dueDate}</td>
                   <td className="py-4 text-right font-medium text-[#72A0D6]">{deal.committedVolume}</td>
                   <td className="py-4 text-right text-[#B0B3BA]">{deal.minimumRaise}</td>
                   <td className="py-4 text-right text-[#B0B3BA]">{deal.maximumRaise}</td>
@@ -261,8 +263,9 @@ export const DealsOverview: React.FC = () => {
               <button
                 key={number}
                 onClick={() => handlePageChange(number)}
-                className={`glass-panel px-4 py-2 ${currentPage === number ? 'bg-[#72A0D6]/20 text-white' : 'text-[#B0B3BA]'
-                  } button-hover`}
+                className={`glass-panel px-4 py-2 ${
+                  currentPage === number ? 'bg-[#72A0D6]/20 text-white' : 'text-[#B0B3BA]'
+                } button-hover`}
               >
                 {number}
               </button>

@@ -12,6 +12,7 @@ import { MembersOverviewTable } from './components/members_insights/MembersOverv
 import { MembersOverviewMetrics } from './components/members_insights/MembersOverviewMetrics';
 import { EventOverviewMetrics } from './components/events_insights/EventOverviewMetrics';
 import { DealsOverview } from './components/deal_insights/DealsOverview';
+import { DealDetails } from './components/deal_insights/DealDetails';
 import { EventsOverview } from './components/events_insights/EventsOverview';
 import { EventDetails } from './components/events_insights/EventDetails';
 import { ContentOverviewMetrics } from './components/content_insights/ContentOverviewMetrics';
@@ -50,9 +51,14 @@ function App() {
         );
       case 'deals':
         return (
-          <div className="space-y-8">
-            <DealsOverview />
-          </div>
+          <Routes>
+            <Route path="/" element={
+              <div className="space-y-8">
+                <DealsOverview />
+              </div>
+            } />
+            <Route path="/deals/:id" element={<DealDetails />} />
+          </Routes>
         );
       case 'events':
         return (
