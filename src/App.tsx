@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
 import { 
   LineChart, 
-  MessageCircle, 
-  MapPin, 
-  Layers,
-  Settings,
-  LayoutDashboard,
   Users,
   Briefcase,
   Calendar,
   FileText,
   Activity
 } from 'lucide-react';
-import { Logo } from './components/Logo';
-import { RegionalInvestmentChart } from './components/RegionalInvestmentChart';
-import { DealsOverview } from './components/DealsOverview';
-import { KeyMetrics } from './components/KeyMetrics';
-import { ActivityMetrics } from './components/ActivityMetrics';
-import { EventParticipationChart } from './components/EventParticipationChart';
-import { EventOverviewMetrics } from './components/EventOverviewMetrics';
-import { EventsOverview } from './components/EventsOverview';
-import { MembersOverviewMetrics } from './components/MembersOverviewMetrics';
-import { MembersOverviewTable } from './components/MembersOverviewTable';
-import { ContentOverviewMetrics } from './components/ContentOverviewMetrics';
-import { ContentOverviewTable } from './components/ContentOverviewTable';
-import { EngagementOverviewMetrics } from './components/EngagementOverviewMetrics';
-import { EngagementOverviewTable } from './components/EngagementOverviewTable';
+import { RegionalInvestmentChart } from './components/deal_insights/RegionalInvestmentChart';
+import { KeyMetrics } from './components/general_insights/KeyMetrics';
+import { MembersOverviewTable } from './components/members_insights/MembersOverviewTable';
+import { MembersOverviewMetrics } from './components/members_insights/MembersOverviewMetrics';
+import { EventOverviewMetrics } from './components/events_insights/EventOverviewMetrics';
+import { ActivityMetrics } from './components/general_insights/ActivityMetrics';
+import { DealsOverview } from './components/deal_insights/DealsOverview';
+import { EventsOverview } from './components/events_insights/EventsOverview';
+import { EventParticipationChart } from './components/events_insights/EventParticipationChart';
+import { ContentOverviewMetrics } from './components/content_insights/ContentOverviewMetrics';
+import { ContentOverviewTable } from './components/content_insights/ContentOverviewTable';
+import { EngagementOverviewTable } from './components/engagement_insights/EngagementOverviewTable';
+import { EngagementOverviewMetrics } from './components/engagement_insights/EngagementOverviewMetrics';
+import { Logo } from './components/shared/Logo';  
+import { useState } from 'react';
+
 
 export type TabType = 'key-metrics' | 'members' | 'deals' | 'events' | 'content' | 'engagement';
 
@@ -36,11 +32,6 @@ const navItems = [
   { icon: Calendar, label: 'Events', id: 'events' },
   { icon: FileText, label: 'Content', id: 'content' },
   { icon: Activity, label: 'Engagement', id: 'engagement' },
-  { icon: MessageCircle, label: 'Communication Center', id: 'communication' },
-  { icon: MapPin, label: 'Placement', id: 'placement' },
-  { icon: Layers, label: 'CMS', id: 'cms' },
-  { icon: Settings, label: 'Administration', id: 'admin' },
-  { icon: LayoutDashboard, label: 'Dashboard', id: 'dashboard' },
 ];
 
 function App() {
