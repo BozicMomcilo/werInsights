@@ -20,8 +20,9 @@ import { ContentOverviewTable } from './components/content_insights/ContentOverv
 import { EngagementOverviewTable } from './components/engagement_insights/EngagementOverviewTable';
 import { EngagementOverviewMetrics } from './components/engagement_insights/EngagementOverviewMetrics';
 import { Logo } from './components/shared/Logo';  
+import { ThemeSwitcher } from './components/shared/ThemeSwitcher';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { useState } from 'react';
-
 
 export type TabType = 'key-metrics' | 'members' | 'deals' | 'events' | 'content' | 'engagement';
 
@@ -86,50 +87,54 @@ function App() {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="flex flex-col h-full">
-          <div className="flex justify-center py-8 mb-8">
-            <Logo />
+    <ThemeProvider>
+      <div className="flex min-h-screen">
+        {/* Sidebar */}
+        <aside className="sidebar">
+          <div className="flex flex-col h-full">
+            <div className="flex justify-center py-8">
+              <Logo />
+            </div>
+            <nav className="flex flex-col flex-1 px-4 space-y-4">
+              {navItems.map((item) => (
+                <div 
+                  key={item.id}
+                  className={`nav-item ${item.id === activeTab ? 'active' : ''}`}
+                  onClick={() => setActiveTab(item.id as TabType)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <item.icon className="w-6 h-6 flex-shrink-0" />
+                  <span className="font-medium">{item.label}</span>
+                </div>
+              ))}
+              <div className="flex-1" />
+              <ThemeSwitcher />
+            </nav>
           </div>
-          <nav className="flex-1 px-4 space-y-4">
-            {navItems.map((item) => (
-              <div 
-                key={item.id}
-                className={`nav-item ${item.id === activeTab ? 'active' : ''}`}
-                onClick={() => setActiveTab(item.id as TabType)}
-                role="button"
-                tabIndex={0}
-              >
-                <item.icon className="w-6 h-6 flex-shrink-0" />
-                <span className="font-medium">{item.label}</span>
-              </div>
-            ))}
-          </nav>
-        </div>
-      </aside>
+        </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 pl-28 pr-4 py-4">
-        {/* Header */}
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-xl font-medium tracking-wide text-white">
-            {navItems.find(item => item.id === activeTab)?.label || 'Insights'}
-          </h1>
-          <div className="profile-image-container">
-            <img 
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
-              alt="Profile" 
-              className="profile-image"
-            />
-          </div>
-        </header>
+        {/* Main Content */}
+        <main className="flex-1 pl-28 pr-4 py-4">
+          {/* Header */}
+          <header className="flex justify-between items-center mb-8">
+            <h1 className="text-xl font-medium tracking-wide">
+              {navItems.find(item => item.id === activeTab)?.label || 'Insights'}
+            </h1>
+            <div className="profile-image-container">
+              <img 
+                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
+                alt="Profile" 
+                className="profile-image"
+              />
+            </div>
+          </header>
 
-        {/* Content */}
-        {renderTabContent()}
-      </main>
-    </div>
+          {/* Content */}
+          {renderTabContent()}
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 
