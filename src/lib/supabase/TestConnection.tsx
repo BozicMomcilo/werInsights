@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase } from './supabaseClient'
+import { supabase, isSupabaseConfigured } from './supabaseClient'
 
 export default function TestConnection() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
@@ -12,8 +12,12 @@ export default function TestConnection() {
 
   const testConnection = async () => {
     try {
+      if (!isSupabaseConfigured()) {
+        throw new Error('Supabase is not configured. Please connect your Supabase project first.')
+      }
+
       // Try to fetch data from a table (replace 'your_table' with an actual table name)
-      const result = await supabase.from('person').select('*')
+      const result = await supabase!.from('person').select('*')
       setData(result.data)
       setStatus('success')
     } catch (err) {

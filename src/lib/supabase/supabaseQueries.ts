@@ -1,8 +1,13 @@
-import { supabase } from './supabaseClient.ts';
+import { supabase, isSupabaseConfigured } from './supabaseClient';
 
 // Fetch all rows from a table
 export async function fetchAllFromTable(tableName: string) {
-  const { data, error } = await supabase
+  if (!isSupabaseConfigured()) {
+    console.error('Supabase is not configured');
+    return null;
+  }
+
+  const { data, error } = await supabase!
     .from(tableName)
     .select('*');
 
@@ -15,7 +20,12 @@ export async function fetchAllFromTable(tableName: string) {
 
 // Fetch a single row by ID
 export async function fetchRowById(tableName: string, id: string) {
-  const { data, error } = await supabase
+  if (!isSupabaseConfigured()) {
+    console.error('Supabase is not configured');
+    return null;
+  }
+
+  const { data, error } = await supabase!
     .from(tableName)
     .select('*')
     .eq('id', id)
@@ -30,7 +40,12 @@ export async function fetchRowById(tableName: string, id: string) {
 
 // Fetch rows with a specific condition
 export async function fetchRowsWithCondition(tableName: string, column: string, value: string) {
-  const { data, error } = await supabase
+  if (!isSupabaseConfigured()) {
+    console.error('Supabase is not configured');
+    return null;
+  }
+
+  const { data, error } = await supabase!
     .from(tableName)
     .select('*')
     .eq(column, value);
@@ -40,4 +55,4 @@ export async function fetchRowsWithCondition(tableName: string, column: string, 
     return null;
   }
   return data;
-} 
+}

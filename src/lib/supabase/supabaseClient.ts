@@ -1,9 +1,16 @@
 import { createClient } from '@supabase/supabase-js'
 
-if (!process.env.SUPABASE_URL) throw new Error('Missing env.SUPABASE_URL')
-if (!process.env.SUPABASE_ANON_KEY) throw new Error('Missing env.SUPABASE_ANON_KEY')
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-export const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-)
+// Create client only if we have valid URLs
+export const supabase = (supabaseUrl && supabaseUrl.startsWith('http') && supabaseAnonKey)
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null
+
+// Helper to check if Supabase is configured
+export const isSupabaseConfigured = () => {
+  return !!supabaseUrl && 
+         supabaseUrl.startsWith('http') && 
+         !!supabaseAnonKey
+}

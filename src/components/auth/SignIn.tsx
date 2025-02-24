@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { auth } from '../../lib/auth'
 import { Logo } from '../shared/Logo'
 import { Mail, Lock, Loader } from 'lucide-react'
+import { isSupabaseConfigured } from '../../lib/supabase/supabaseClient'
 
 export const SignIn = () => {
   const navigate = useNavigate()
@@ -24,6 +25,11 @@ export const SignIn = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!isSupabaseConfigured()) {
+      setError('Please connect your Supabase project first')
+      return
+    }
     
     if (!formData.email || !formData.password) {
       setError('Please fill in all fields')
