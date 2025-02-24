@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
   Building2, 
@@ -75,19 +75,8 @@ const dealData = {
   ]
 };
 
-const getStatusColor = (status: string) => {
-  switch (status.toLowerCase()) {
-    case 'confirmed':
-      return 'text-[#28E0B9]';
-    case 'pending':
-      return 'text-[#FFE8AC]';
-    default:
-      return 'text-white';
-  }
-};
 
 export const DealDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   // In a real application, fetch deal data based on the ID
@@ -263,7 +252,6 @@ export const DealDetails: React.FC = () => {
               <th className="text-left pb-4">Investor</th>
               <th className="text-center pb-4">Tickets</th>
               <th className="text-right pb-4">Amount</th>
-              <th className="text-right pb-4">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -287,11 +275,6 @@ export const DealDetails: React.FC = () => {
                 <td className="py-4 text-center">{commitment.tickets}</td>
                 <td className="py-4 text-right font-medium text-[#72A0D6]">
                   {commitment.amount}
-                </td>
-                <td className="py-4 text-right">
-                  <span className={`${getStatusColor(commitment.status)} font-medium`}>
-                    {commitment.status}
-                  </span>
                 </td>
               </tr>
             ))}
