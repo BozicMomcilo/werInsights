@@ -113,19 +113,6 @@
   .section-title {
     @apply text-xl font-medium tracking-wide text-white;
   }
-
-  /* New styles for form inputs */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus {
-    -webkit-text-fill-color: white;
-    -webkit-box-shadow: 0 0 0px 1000px #0A101A inset;
-    transition: background-color 5000s ease-in-out 0s;
-  }
-
-  input:focus::placeholder {
-    color: rgba(176, 179, 186, 0.5);
-  }
 }
 
 .sparkline {

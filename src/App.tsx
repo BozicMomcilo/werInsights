@@ -1,7 +1,4 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { SignIn } from './components/auth/SignIn';
-import { auth } from './lib/auth';
+import React, { useState } from 'react';
 import { 
   LineChart, 
   MessageCircle, 
@@ -9,37 +6,44 @@ import {
   Layers,
   Settings,
   LayoutDashboard,
+  Users,
+  Briefcase,
+  Calendar,
+  FileText,
+  Activity
 } from 'lucide-react';
-import { Logo } from './components/shared/Logo';
+import { Logo } from './components/Logo';
 import { RegionalInvestmentChart } from './components/RegionalInvestmentChart';
-import { DealsOverview } from './components/deal_insights/DealsOverview';
-import { KeyMetrics } from './components/general_insights/KeyMetrics';
-import { ActivityMetrics } from './components/general_insights/ActivityMetrics';
-import { EventParticipationChart } from './components/events_insights/EventParticipationChart';
-import { EventOverviewMetrics } from './components/events_insights/EventOverviewMetrics';
-import { EventsOverview } from './components/events_insights/EventsOverview';
-import { MembersOverviewMetrics } from './components/members_insights/MembersOverviewMetrics';
-import { MembersOverviewTable } from './components/members_insights/MembersOverviewTable';
-import { MemberActivityChart } from './components/members_insights/MemberActivityChart';
-import { ContentOverviewMetrics } from './components/content_insights/ContentOverviewMetrics';
-import { ContentOverviewTable } from './components/content_insights/ContentOverviewTable';
-import { ContentEngagementChart } from './components/content_insights/ContentEngagementChart';
-import { EngagementOverviewMetrics } from './components/engagement_insights/EngagementOverviewMetrics';
-import { EngagementOverviewTable } from './components/engagement_insights/EngagementOverviewTable';
-import { EngagementTimeline } from './components/engagement_insights/EngagementTimeline';
-
-const navItems = [
-  { icon: LineChart, label: 'Insights', active: true },
-  { icon: MessageCircle, label: 'Communication Center' },
-  { icon: MapPin, label: 'Placement' },
-  { icon: Layers, label: 'CMS' },
-  { icon: Settings, label: 'Administration' },
-  { icon: LayoutDashboard, label: 'Dashboard' },
-];
+import { DealsOverview } from './components/DealsOverview';
+import { KeyMetrics } from './components/KeyMetrics';
+import { ActivityMetrics } from './components/ActivityMetrics';
+import { EventParticipationChart } from './components/EventParticipationChart';
+import { EventOverviewMetrics } from './components/EventOverviewMetrics';
+import { EventsOverview } from './components/EventsOverview';
+import { MembersOverviewMetrics } from './components/MembersOverviewMetrics';
+import { MembersOverviewTable } from './components/MembersOverviewTable';
+import { ContentOverviewMetrics } from './components/ContentOverviewMetrics';
+import { ContentOverviewTable } from './components/ContentOverviewTable';
+import { EngagementOverviewMetrics } from './components/EngagementOverviewMetrics';
+import { EngagementOverviewTable } from './components/EngagementOverviewTable';
 
 export type TabType = 'key-metrics' | 'members' | 'deals' | 'events' | 'content' | 'engagement';
 
-function Dashboard() {
+const navItems = [
+  { icon: LineChart, label: 'Key Metrics', id: 'key-metrics' },
+  { icon: Users, label: 'Members', id: 'members' },
+  { icon: Briefcase, label: 'Deals', id: 'deals' },
+  { icon: Calendar, label: 'Events', id: 'events' },
+  { icon: FileText, label: 'Content', id: 'content' },
+  { icon: Activity, label: 'Engagement', id: 'engagement' },
+  { icon: MessageCircle, label: 'Communication Center', id: 'communication' },
+  { icon: MapPin, label: 'Placement', id: 'placement' },
+  { icon: Layers, label: 'CMS', id: 'cms' },
+  { icon: Settings, label: 'Administration', id: 'admin' },
+  { icon: LayoutDashboard, label: 'Dashboard', id: 'dashboard' },
+];
+
+function App() {
   const [activeTab, setActiveTab] = useState<TabType>('key-metrics');
 
   const renderTabContent = () => {
@@ -51,7 +55,6 @@ function Dashboard() {
           <div className="space-y-8">
             <MembersOverviewMetrics />
             <MembersOverviewTable />
-            <MemberActivityChart />
           </div>
         );
       case 'deals':
@@ -77,7 +80,6 @@ function Dashboard() {
           <div className="space-y-8">
             <ContentOverviewMetrics />
             <ContentOverviewTable />
-            <ContentEngagementChart />
           </div>
         );
       case 'engagement':
@@ -85,7 +87,6 @@ function Dashboard() {
           <div className="space-y-8">
             <EngagementOverviewMetrics />
             <EngagementOverviewTable />
-            <EngagementTimeline />
           </div>
         );
       default:
@@ -102,9 +103,15 @@ function Dashboard() {
             <Logo />
           </div>
           <nav className="flex-1 px-4 space-y-4">
-            {navItems.map((item, index) => (
-              <div key={index} className={`nav-item ${item.active ? 'active' : ''}`}>
-                <item.icon className="w-6 h-6 flex-shrink-0 text-white" />
+            {navItems.map((item) => (
+              <div 
+                key={item.id}
+                className={`nav-item ${item.id === activeTab ? 'active' : ''}`}
+                onClick={() => setActiveTab(item.id as TabType)}
+                role="button"
+                tabIndex={0}
+              >
+                <item.icon className="w-6 h-6 flex-shrink-0" />
                 <span className="font-medium">{item.label}</span>
               </div>
             ))}
@@ -116,47 +123,9 @@ function Dashboard() {
       <main className="flex-1 pl-28 pr-4 py-4">
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
-          <div className="flex items-center space-x-2">
-            <h1 className="text-xl font-medium tracking-wide text-white">Insights</h1>
-            <div className="tab-container ml-8">
-              <button 
-                className={`tab ${activeTab === 'key-metrics' ? 'active' : ''}`}
-                onClick={() => setActiveTab('key-metrics')}
-              >
-                Key metrics
-              </button>
-              <button 
-                className={`tab ${activeTab === 'members' ? 'active' : ''}`}
-                onClick={() => setActiveTab('members')}
-              >
-                Members
-              </button>
-              <button 
-                className={`tab ${activeTab === 'deals' ? 'active' : ''}`}
-                onClick={() => setActiveTab('deals')}
-              >
-                Deals
-              </button>
-              <button 
-                className={`tab ${activeTab === 'events' ? 'active' : ''}`}
-                onClick={() => setActiveTab('events')}
-              >
-                Events
-              </button>
-              <button 
-                className={`tab ${activeTab === 'content' ? 'active' : ''}`}
-                onClick={() => setActiveTab('content')}
-              >
-                Content
-              </button>
-              <button 
-                className={`tab ${activeTab === 'engagement' ? 'active' : ''}`}
-                onClick={() => setActiveTab('engagement')}
-              >
-                Engagement
-              </button>
-            </div>
-          </div>
+          <h1 className="text-xl font-medium tracking-wide text-white">
+            {navItems.find(item => item.id === activeTab)?.label || 'Insights'}
+          </h1>
           <div className="profile-image-container">
             <img 
               src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
@@ -166,47 +135,11 @@ function Dashboard() {
           </div>
         </header>
 
-        {/* Tab Content */}
+        {/* Content */}
         {renderTabContent()}
       </main>
     </div>
   );
 }
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const session = await auth.getSession();
-      setIsAuthenticated(!!session);
-    };
-    checkAuth();
-  }, []);
-
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
-
-  return isAuthenticated ? <>{children}</> : <Navigate to="/signin" />;
-}
-
-export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* Redirect root to signin */}
-        <Route path="/" element={<Navigate to="/signin" replace />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route
-          path="/*"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+export default App;
