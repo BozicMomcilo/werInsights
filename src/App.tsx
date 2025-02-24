@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { SignIn } from './components/SignIn';
+import { auth } from './lib/auth';
 import { 
   LineChart, 
   MessageCircle, 
@@ -6,7 +9,6 @@ import {
   Layers,
   Settings,
   LayoutDashboard,
-
 } from 'lucide-react';
 import { Logo } from './components/Logo';
 import { RegionalInvestmentChart } from './components/RegionalInvestmentChart';
@@ -37,7 +39,7 @@ const navItems = [
 
 export type TabType = 'key-metrics' | 'members' | 'deals' | 'events' | 'content' | 'engagement';
 
-function App() {
+function Dashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('key-metrics');
 
   const renderTabContent = () => {
@@ -168,6 +170,42 @@ function App() {
         {renderTabContent()}
       </main>
     </div>
+  );
+}
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const session = await auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+    checkAuth();
+  }, []);
+
+  if (isAuthenticated === null) {
+    return <div>Loading...</div>;
+  }
+
+  return isAuthenticated ? <>{children}</> : <Navigate to="/signin" />;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/signin" element={<SignIn />} />
+        <Route
+          path="/*"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
