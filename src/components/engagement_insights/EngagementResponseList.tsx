@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Filter, Clock, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Filter, Clock, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 // Updated sample data to reflect questionnaire responses
@@ -132,9 +132,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
   currentPage,
   totalPages,
   onPageChange,
-  itemCount,
-  totalItems,
-  startIndex,
+  itemCount,  startIndex,
   endIndex,
   className = ''
 }) => (
@@ -266,16 +264,6 @@ export const EngagementResponseList: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center space-x-6">
-          <div className="text-right">
-            <div className="text-sm font-medium text-[#72A0D6]">
-              {response.responseCount} Responses
-            </div>
-            {response.averageRating && (
-              <div className="text-sm text-[#FFE8AC]">
-                {response.averageRating.toFixed(1)} Rating
-              </div>
-            )}
-          </div>
           <div className="text-sm text-[#B0B3BA]">
             {formatDate(response.completedAt)}
           </div>
