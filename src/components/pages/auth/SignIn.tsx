@@ -40,7 +40,7 @@ export const SignIn = () => {
       setIsLoading(true)
       setError(null)
       await auth.signIn(formData.email, formData.password)
-      navigate('/')
+      navigate('/dashboard')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred')
     } finally {
@@ -115,11 +115,6 @@ export const SignIn = () => {
             )}
           </button>
         </form>
-
-        <div className="text-center text-sm text-[#B0B3BA]">
-          <p>Test credentials for demo:</p>
-          <p className="font-mono mt-1">test@example.com / testpassword</p>
-        </div>
       </div>
     </div>
   )
