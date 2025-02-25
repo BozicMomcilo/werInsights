@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Calendar, Filter, Clock, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-// Sample data - replace with real data from your backend
+// Updated sample data to reflect questionnaire responses
 const engagementResponses = [
   {
     id: 1,
@@ -10,13 +11,16 @@ const engagementResponses = [
       image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=160&h=160&q=80&fit=crop',
       role: 'Senior Investor'
     },
-    engagement: {
-      title: 'Q2 Investment Strategy Meeting',
-      type: 'Event'
+    questionnaire: {
+      id: 'q1',
+      title: 'Investment Strategy Survey 2024',
+      type: 'Multi-Question',
+      image: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=400&fit=crop'
     },
-    response: 'Attending',
-    date: '2024-04-20T10:00:00',
-    status: 'current'
+    completedAt: '2024-04-20T10:00:00',
+    status: 'current',
+    responseCount: 8,
+    averageRating: 4.5
   },
   {
     id: 2,
@@ -25,13 +29,16 @@ const engagementResponses = [
       image: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=160&h=160&q=80&fit=crop',
       role: 'Portfolio Manager'
     },
-    engagement: {
-      title: 'Tech Sector Analysis Webinar',
-      type: 'Webinar'
+    questionnaire: {
+      id: 'q2',
+      title: 'Tech Sector Feedback Form',
+      type: 'Rating',
+      image: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=1200&h=400&fit=crop'
     },
-    response: 'Maybe',
-    date: '2024-04-22T14:00:00',
-    status: 'current'
+    completedAt: '2024-04-22T14:00:00',
+    status: 'current',
+    responseCount: 5,
+    averageRating: 4.2
   },
   {
     id: 3,
@@ -40,104 +47,70 @@ const engagementResponses = [
       image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=160&h=160&q=80&fit=crop',
       role: 'Investment Analyst'
     },
-    engagement: {
-      title: 'Startup Pitch Day',
-      type: 'Event'
+    questionnaire: {
+      id: 'q3',
+      title: 'Startup Investment Preferences',
+      type: 'Multiple Choice',
+      image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&h=400&fit=crop'
     },
-    response: 'Not Attending',
-    date: '2024-04-18T09:00:00',
-    status: 'past'
-  },
-  {
-    id: 4,
-    member: {
-      name: 'James Walker',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&h=160&q=80&fit=crop',
-      role: 'Investment Director'
-    },
-    engagement: {
-      title: 'Market Trends Discussion',
-      type: 'Meeting'
-    },
-    response: 'Attending',
-    date: '2024-04-25T11:00:00',
-    status: 'current'
-  },
-  {
-    id: 5,
-    member: {
-      name: 'Emily Chen',
-      image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=160&h=160&q=80&fit=crop',
-      role: 'Venture Partner'
-    },
-    engagement: {
-      title: 'Investment Committee Review',
-      type: 'Meeting'
-    },
-    response: 'Attending',
-    date: '2024-04-15T15:00:00',
-    status: 'past'
+    completedAt: '2024-04-18T09:00:00',
+    status: 'past',
+    responseCount: 6,
+    averageRating: null
   }
 ];
 
-// Add more sample data for better pagination demonstration
+// Add more sample data for pagination demonstration
 const additionalResponses = [
-  // Current engagements
+  // Current questionnaire responses
   ...Array.from({ length: 8 }, (_, i) => ({
-    id: i + 6,
+    id: i + 4,
     member: {
       name: `Current Member ${i + 1}`,
       image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&h=160&q=80&fit=crop',
       role: 'Investor'
     },
-    engagement: {
-      title: `Current Event ${i + 1}`,
-      type: ['Event', 'Webinar', 'Meeting'][i % 3]
+    questionnaire: {
+      id: `q${i + 4}`,
+      title: `Current Survey ${i + 1}`,
+      type: ['Multi-Question', 'Rating', 'Multiple Choice'][i % 3],
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=400&fit=crop'
     },
-    response: ['Attending', 'Maybe', 'Not Attending'][i % 3],
-    date: new Date(Date.now() + (i * 86400000)).toISOString(),
-    status: 'current'
+    completedAt: new Date(Date.now() + (i * 86400000)).toISOString(),
+    status: 'current',
+    responseCount: Math.floor(Math.random() * 5) + 3,
+    averageRating: Math.random() * 2 + 3
   })),
-  // Past engagements
+  // Past questionnaire responses
   ...Array.from({ length: 8 }, (_, i) => ({
-    id: i + 14,
+    id: i + 12,
     member: {
       name: `Past Member ${i + 1}`,
       image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=160&h=160&q=80&fit=crop',
       role: 'Investor'
     },
-    engagement: {
-      title: `Past Event ${i + 1}`,
-      type: ['Event', 'Webinar', 'Meeting'][i % 3]
+    questionnaire: {
+      id: `q${i + 12}`,
+      title: `Past Survey ${i + 1}`,
+      type: ['Multi-Question', 'Rating', 'Multiple Choice'][i % 3],
+      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=400&fit=crop'
     },
-    response: ['Attending', 'Maybe', 'Not Attending'][i % 3],
-    date: new Date(Date.now() - (i * 86400000)).toISOString(),
-    status: 'past'
+    completedAt: new Date(Date.now() - (i * 86400000)).toISOString(),
+    status: 'past',
+    responseCount: Math.floor(Math.random() * 5) + 3,
+    averageRating: Math.random() * 2 + 3
   }))
 ];
 
 const allEngagementResponses = [...engagementResponses, ...additionalResponses];
 
-const getResponseColor = (response: string) => {
-  switch (response.toLowerCase()) {
-    case 'attending':
-      return 'text-[#28E0B9]';
-    case 'not attending':
-      return 'text-[#FF3B3B]';
-    case 'maybe':
-      return 'text-[#FFE8AC]';
-    default:
-      return 'text-white';
-  }
-};
-
 const getTypeColor = (type: string) => {
   switch (type.toLowerCase()) {
-    case 'event':
+    case 'multi-question':
       return 'text-[#72A0D6]';
-    case 'webinar':
+    case 'rating':
       return 'text-[#FFE8AC]';
-    case 'meeting':
+    case 'multiple choice':
       return 'text-[#28E0B9]';
     default:
       return 'text-white';
@@ -202,9 +175,9 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
 const ITEMS_PER_PAGE = 5;
 
 export const EngagementResponseList: React.FC = () => {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     status: 'all',
-    response: 'all',
     type: 'all',
     sortBy: 'date'
   });
@@ -231,13 +204,12 @@ export const EngagementResponseList: React.FC = () => {
   const filteredResponses = allEngagementResponses
     .filter(response => {
       if (filters.status !== 'all' && response.status !== filters.status) return false;
-      if (filters.response !== 'all' && response.response.toLowerCase() !== filters.response) return false;
-      if (filters.type !== 'all' && response.engagement.type.toLowerCase() !== filters.type) return false;
+      if (filters.type !== 'all' && response.questionnaire.type.toLowerCase() !== filters.type) return false;
       return true;
     })
     .sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
+      const dateA = new Date(a.completedAt).getTime();
+      const dateB = new Date(b.completedAt).getTime();
       return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     });
 
@@ -257,12 +229,17 @@ export const EngagementResponseList: React.FC = () => {
   const pastEndIndex = pastStartIndex + ITEMS_PER_PAGE;
   const pastEngagements = allPastEngagements.slice(pastStartIndex, pastEndIndex);
 
+  const handleEngagementClick = (engagementId: number) => {
+    navigate(`/engagement/${engagementId}`);
+  };
+
   const renderEngagementItem = (response: typeof allEngagementResponses[0], isPast = false) => (
     <div
       key={response.id}
-      className={`glass-panel p-4 transition-all duration-300 hover:bg-[#72A0D6]/5 ${
+      className={`glass-panel p-4 transition-all duration-300 hover:bg-[#72A0D6]/5 cursor-pointer ${
         isPast ? 'opacity-75' : ''
       }`}
+      onClick={() => handleEngagementClick(response.id)}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -280,20 +257,27 @@ export const EngagementResponseList: React.FC = () => {
               <span className="text-sm text-[#B0B3BA]">{response.member.role}</span>
             </div>
             <div className="flex items-center space-x-2 mt-1">
-              <span className={`text-sm ${getTypeColor(response.engagement.type)}`}>
-                {response.engagement.type}
+              <span className={`text-sm ${getTypeColor(response.questionnaire.type)}`}>
+                {response.questionnaire.type}
               </span>
               <span className="text-sm text-[#B0B3BA]">•</span>
-              <span className="text-sm text-[#B0B3BA]">{response.engagement.title}</span>
+              <span className="text-sm text-[#B0B3BA]">{response.questionnaire.title}</span>
             </div>
           </div>
         </div>
         <div className="flex items-center space-x-6">
-          <div className={`font-medium ${getResponseColor(response.response)}`}>
-            {response.response}
+          <div className="text-right">
+            <div className="text-sm font-medium text-[#72A0D6]">
+              {response.responseCount} Responses
+            </div>
+            {response.averageRating && (
+              <div className="text-sm text-[#FFE8AC]">
+                {response.averageRating.toFixed(1)} Rating
+              </div>
+            )}
           </div>
           <div className="text-sm text-[#B0B3BA]">
-            {formatDate(response.date)}
+            {formatDate(response.completedAt)}
           </div>
         </div>
       </div>
@@ -303,7 +287,7 @@ export const EngagementResponseList: React.FC = () => {
   return (
     <div className="glass-panel p-6 mt-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="section-title">Engagement Responses</h2>
+        <h2 className="section-title">Questionnaire Responses</h2>
         <div className="flex items-center space-x-4">
           <div className="glass-panel px-4 py-2 flex items-center space-x-2">
             <Clock className="w-4 h-4" />
@@ -320,27 +304,14 @@ export const EngagementResponseList: React.FC = () => {
           <div className="glass-panel px-4 py-2 flex items-center space-x-2">
             <Filter className="w-4 h-4" />
             <select
-              value={filters.response}
-              onChange={(e) => setFilters(prev => ({ ...prev, response: e.target.value }))}
-              className="bg-transparent border-none text-sm focus:outline-none"
-            >
-              <option value="all">All Responses</option>
-              <option value="attending">Attending</option>
-              <option value="not attending">Not Attending</option>
-              <option value="maybe">Maybe</option>
-            </select>
-          </div>
-          <div className="glass-panel px-4 py-2 flex items-center space-x-2">
-            <Filter className="w-4 h-4" />
-            <select
               value={filters.type}
               onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
               className="bg-transparent border-none text-sm focus:outline-none"
             >
               <option value="all">All Types</option>
-              <option value="event">Events</option>
-              <option value="webinar">Webinars</option>
-              <option value="meeting">Meetings</option>
+              <option value="multi-question">Multi-Question</option>
+              <option value="rating">Rating</option>
+              <option value="multiple choice">Multiple Choice</option>
             </select>
           </div>
         </div>
@@ -351,7 +322,7 @@ export const EngagementResponseList: React.FC = () => {
         {allCurrentEngagements.length > 0 && (
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium text-[#28E0B9]">Current Engagements</h3>
+              <h3 className="text-lg font-medium text-[#28E0B9]">Current Responses</h3>
               <button
                 onClick={toggleSortOrder}
                 className="glass-panel p-2 flex items-center space-x-2"
@@ -385,7 +356,7 @@ export const EngagementResponseList: React.FC = () => {
         {/* Past Engagements Section */}
         {allPastEngagements.length > 0 && (
           <div>
-            <h3 className="text-lg font-medium text-[#B0B3BA] mb-4">Past Engagements</h3>
+            <h3 className="text-lg font-medium text-[#B0B3BA] mb-4">Past Responses</h3>
             <div className="space-y-2">
               {pastEngagements.map(response => renderEngagementItem(response, true))}
             </div>
