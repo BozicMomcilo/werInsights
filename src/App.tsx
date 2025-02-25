@@ -24,6 +24,7 @@ import { ThemeSwitcher } from './components/shared/ThemeSwitcher';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useState } from 'react';
 import { EngagementResponseList } from './components/engagement_insights/EngagementResponseList';
+import { MemberDetails } from './components/members_insights/MemberDetails';
 
 export type TabType = 'key-metrics' | 'members' | 'deals' | 'events' | 'content' | 'engagement';
 
@@ -45,10 +46,15 @@ function App() {
         return <KeyMetrics />;
       case 'members':
         return (
-          <div className="space-y-8">
-            <MembersOverviewMetrics />
-            <MembersOverviewTable />
-          </div>
+          <Routes>
+            <Route path="/" element={
+              <div className="space-y-8">
+                <MembersOverviewMetrics />
+                <MembersOverviewTable />
+              </div>
+            } />
+            <Route path="/members/:id" element={<MemberDetails />} />
+          </Routes>
         );
       case 'deals':
         return (
