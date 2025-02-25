@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Calendar, Filter, MessageSquare, ThumbsUp, PenSquare, Share2 } from 'lucide-react';
+import { Calendar, Filter, MessageSquare, ThumbsUp, PenSquare, Share2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { EngagementResponseList } from './EngagementResponseList';
 
 const engagements = [
   {
@@ -79,6 +80,8 @@ const getEngagementTypeColor = (type: string) => {
   }
 };
 
+const ITEMS_PER_PAGE = 5;
+
 export const EngagementOverviewTable: React.FC = () => {
   const [filters, setFilters] = useState({
     period: 'month',
@@ -86,122 +89,168 @@ export const EngagementOverviewTable: React.FC = () => {
     sort: 'interactions'
   });
 
-  return (
-    <div className="glass-panel p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="section-title">Engagement Overview</h2>
-        <div className="flex items-center space-x-4">
-          <div className="glass-panel px-4 py-2 flex items-center space-x-2">
-            <Calendar className="w-4 h-4" />
-            <select
-              value={filters.period}
-              onChange={(e) => setFilters(prev => ({ ...prev, period: e.target.value }))}
-              className="bg-transparent border-none text-sm focus:outline-none"
-            >
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="quarter">This Quarter</option>
-            </select>
-          </div>
-          <div className="glass-panel px-4 py-2 flex items-center space-x-2">
-            <Filter className="w-4 h-4" />
-            <select
-              value={filters.type}
-              onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
-              className="bg-transparent border-none text-sm focus:outline-none"
-            >
-              <option value="all">All Types</option>
-              <option value="post">Posts</option>
-              <option value="like">Likes</option>
-              <option value="comment">Comments</option>
-              <option value="share">Shares</option>
-            </select>
-          </div>
-          <div className="glass-panel px-4 py-2 flex items-center space-x-2">
-            <Filter className="w-4 h-4" />
-            <select
-              value={filters.sort}
-              onChange={(e) => setFilters(prev => ({ ...prev, sort: e.target.value }))}
-              className="bg-transparent border-none text-sm focus:outline-none"
-            >
-              <option value="interactions">Sort by Interactions</option>
-              <option value="date">Sort by Date</option>
-              <option value="name">Sort by Name</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      
-      <table className="w-full">
-        <thead>
-          <tr className="text-[#B0B3BA] text-sm font-medium">
-            <th className="text-left pb-4">Member Name</th>
-            <th className="text-left pb-4">Engagement Type</th>
-            <th className="text-left pb-4">Interaction Count</th>
-            <th className="text-left pb-4">Last Engagement</th>
-            <th className="text-left pb-4">Top Activity</th>
-          </tr>
-        </thead>
-        <tbody className="font-light">
-          {engagements.map((engagement) => {
-            const EngagementTypeIcon = getEngagementTypeIcon(engagement.engagement_type);
-            return (
-              <tr 
-                key={engagement.id} 
-                className="border-t border-white/5 hover:bg-[#72A0D6]/5 transition-colors"
-              >
-                <td className="py-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white/10">
-                      <img 
-                        src={engagement.image} 
-                        alt={engagement.member_name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <span className="hover:text-[#72A0D6] cursor-pointer transition-colors">
-                      {engagement.member_name}
-                    </span>
-                  </div>
-                </td>
-                <td className="py-4">
-                  <div className="flex items-center space-x-2">
-                    <EngagementTypeIcon className={`w-4 h-4 ${getEngagementTypeColor(engagement.engagement_type)}`} />
-                    <span className={`${getEngagementTypeColor(engagement.engagement_type)} font-medium`}>
-                      {engagement.engagement_type}
-                    </span>
-                  </div>
-                </td>
-                <td className="py-4">{engagement.interaction_count}</td>
-                <td className="py-4">{engagement.last_engagement}</td>
-                <td className="py-4">{engagement.top_activity}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+  const [currentPage, setCurrentPage] = useState(1);
 
-      <div className="mt-6 space-y-2 text-sm text-[#B0B3BA]">
-        <div className="font-medium text-white mb-3">Engagement Types:</div>
-        <div className="flex items-center space-x-6">
-          <div className="flex items-center space-x-2">
-            <PenSquare className="w-4 h-4 text-[#72A0D6]" />
-            <span>Posts</span>
+  // Calculate pagination
+  const totalPages = Math.ceil(engagements.length / ITEMS_PER_PAGE);
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentItems = engagements.slice(indexOfFirstItem, indexOfLastItem);
+
+  return (
+    <div className="space-y-8">
+      <div className="glass-panel p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="section-title">Engagement Overview</h2>
+          <div className="flex items-center space-x-4">
+            <div className="glass-panel px-4 py-2 flex items-center space-x-2">
+              <Calendar className="w-4 h-4" />
+              <select
+                value={filters.period}
+                onChange={(e) => setFilters(prev => ({ ...prev, period: e.target.value }))}
+                className="bg-transparent border-none text-sm focus:outline-none"
+              >
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+                <option value="quarter">This Quarter</option>
+              </select>
+            </div>
+            <div className="glass-panel px-4 py-2 flex items-center space-x-2">
+              <Filter className="w-4 h-4" />
+              <select
+                value={filters.type}
+                onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
+                className="bg-transparent border-none text-sm focus:outline-none"
+              >
+                <option value="all">All Types</option>
+                <option value="post">Posts</option>
+                <option value="like">Likes</option>
+                <option value="comment">Comments</option>
+                <option value="share">Shares</option>
+              </select>
+            </div>
+            <div className="glass-panel px-4 py-2 flex items-center space-x-2">
+              <Filter className="w-4 h-4" />
+              <select
+                value={filters.sort}
+                onChange={(e) => setFilters(prev => ({ ...prev, sort: e.target.value }))}
+                className="bg-transparent border-none text-sm focus:outline-none"
+              >
+                <option value="interactions">Sort by Interactions</option>
+                <option value="date">Sort by Date</option>
+                <option value="name">Sort by Name</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <table className="w-full">
+          <thead>
+            <tr className="text-[#B0B3BA] text-sm font-medium">
+              <th className="text-left pb-4">Member Name</th>
+              <th className="text-left pb-4">Engagement Type</th>
+              <th className="text-left pb-4">Interaction Count</th>
+              <th className="text-left pb-4">Last Engagement</th>
+              <th className="text-left pb-4">Top Activity</th>
+            </tr>
+          </thead>
+          <tbody className="font-light divide-y divide-white/5">
+            {currentItems.map((engagement) => {
+              const EngagementTypeIcon = getEngagementTypeIcon(engagement.engagement_type);
+              return (
+                <tr 
+                  key={engagement.id} 
+                  className="hover:bg-[#72A0D6]/5 transition-colors"
+                >
+                  <td className="py-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white/10">
+                        <img 
+                          src={engagement.image} 
+                          alt={engagement.member_name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <span className="hover:text-[#72A0D6] cursor-pointer transition-colors">
+                        {engagement.member_name}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-4">
+                    <div className="flex items-center space-x-2">
+                      <EngagementTypeIcon className={`w-4 h-4 ${getEngagementTypeColor(engagement.engagement_type)}`} />
+                      <span className={`${getEngagementTypeColor(engagement.engagement_type)} font-medium`}>
+                        {engagement.engagement_type}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="py-4">{engagement.interaction_count}</td>
+                  <td className="py-4">{engagement.last_engagement}</td>
+                  <td className="py-4">{engagement.top_activity}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        {/* Pagination */}
+        <div className="flex justify-between items-center mt-6 pt-4 border-t border-white/5">
+          <div className="text-sm text-[#B0B3BA]">
+            Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, engagements.length)} of {engagements.length} items
           </div>
           <div className="flex items-center space-x-2">
-            <ThumbsUp className="w-4 h-4 text-[#FFE8AC]" />
-            <span>Likes</span>
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+              className="glass-panel p-2 disabled:opacity-50 button-hover"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+              <button
+                key={number}
+                onClick={() => setCurrentPage(number)}
+                className={`glass-panel px-4 py-2 ${
+                  currentPage === number ? 'bg-[#72A0D6]/20 text-white' : 'text-[#B0B3BA]'
+                } button-hover`}
+              >
+                {number}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
+              className="glass-panel p-2 disabled:opacity-50 button-hover"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
-          <div className="flex items-center space-x-2">
-            <MessageSquare className="w-4 h-4 text-[#28E0B9]" />
-            <span>Comments</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Share2 className="w-4 h-4 text-[#B475E0]" />
-            <span>Shares</span>
+        </div>
+
+        <div className="mt-6 space-y-2 text-sm text-[#B0B3BA]">
+          <div className="font-medium text-white mb-3">Engagement Types:</div>
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <PenSquare className="w-4 h-4 text-[#72A0D6]" />
+              <span>Posts</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <ThumbsUp className="w-4 h-4 text-[#FFE8AC]" />
+              <span>Likes</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <MessageSquare className="w-4 h-4 text-[#28E0B9]" />
+              <span>Comments</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Share2 className="w-4 h-4 text-[#B475E0]" />
+              <span>Shares</span>
+            </div>
           </div>
         </div>
       </div>
+
+      <EngagementResponseList />
     </div>
   );
 };
