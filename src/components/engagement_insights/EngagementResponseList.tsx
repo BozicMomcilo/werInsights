@@ -228,7 +228,7 @@ export const EngagementResponseList: React.FC = () => {
   const pastEngagements = allPastEngagements.slice(pastStartIndex, pastEndIndex);
 
   const handleEngagementClick = (engagementId: number) => {
-    navigate(`/engagement/${engagementId}`);
+    navigate(`/dashboard/engagements/${engagementId}`);
   };
 
   const renderEngagementItem = (response: typeof allEngagementResponses[0], isPast = false) => (

@@ -102,7 +102,7 @@ export const DealsOverview: React.FC = () => {
   };
 
   const handleDealClick = (dealId: number) => {
-    navigate(`/deals/${dealId}`);
+    navigate(`/dashboard/deals/${dealId}`);
   };
 
   useEffect(() => {
@@ -114,8 +114,8 @@ export const DealsOverview: React.FC = () => {
 
       try {
         const { data, error: supabaseError } = await supabase!
-          .from('deals')
-          .select('*');
+          .from('item')
+          .select('*').eq('type', 'Deal');
 
         if (supabaseError) {
           throw supabaseError;

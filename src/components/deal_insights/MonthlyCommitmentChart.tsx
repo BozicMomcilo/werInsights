@@ -36,7 +36,7 @@ export const MonthlyCommitmentChart: React.FC = () => {
 
   // Calculate metrics
   const totalCommitment = data.reduce((acc, curr) => acc + curr.committedAmount, 0);
-  const averageCommitment = totalCommitment / data.length;
+  const averageCommitment = Number((totalCommitment / data.length).toFixed(2));
   const highestMonth = data.reduce((prev, curr) => 
     prev.committedAmount > curr.committedAmount ? prev : curr
   );

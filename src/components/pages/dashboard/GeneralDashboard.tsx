@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { 
   LineChart, 
   Users,
@@ -9,7 +8,7 @@ import {
   Activity,
   LogOut
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../../../lib/auth/auth';
 import { Logo } from '../../shared/Logo';
 import { ThemeSwitcher } from '../../shared/ThemeSwitcher';
@@ -26,8 +25,10 @@ import { ContentEngagementChart } from "../../content_insights/ContentEngagement
 import { EngagementOverviewMetrics } from "../../engagement_insights/EngagementOverviewMetrics";
 import { EngagementResponseList } from "../../engagement_insights/EngagementResponseList";
 import { MemberDetails } from '../../members_insights/MemberDetails';
-
-export type TabType = 'key-metrics' | 'members' | 'deals' | 'events' | 'content' | 'engagement';
+import { EventDetails } from '../../events_insights/EventDetails';
+import { EngagementDetails } from '../../engagement_insights/EngagementDetails';
+import { ContentDetails } from '../../content_insights/ContentDetails';
+import { DealDetails } from '../../deal_insights/DealDetails';
 
 const navItems = [
   { icon: LineChart, label: 'Key Metrics', id: 'key-metrics' },
@@ -39,7 +40,6 @@ const navItems = [
 ];
 
 export function GeneralDashboard() {
-  const [activeTab, setActiveTab] = useState<TabType>('key-metrics');
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -48,51 +48,6 @@ export function GeneralDashboard() {
       navigate('/signin');
     } catch (error) {
       console.error('Error signing out:', error);
-    }
-  };
-
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'key-metrics':
-        return <KeyMetrics />;
-      case 'members':
-        return (
-          <div className="space-y-8">
-            <MembersOverviewMetrics />
-            <MembersOverviewTable />
-            <MemberActivityChart />
-          </div>
-        );
-      case 'deals':
-        return (
-          <div className="space-y-8">
-            <DealsOverview />
-          </div>
-        );
-      case 'events':
-        return (
-          <div className="space-y-8">
-            <EventOverviewMetrics />
-            <EventsOverview />
-          </div>
-        );
-      case 'content':
-        return (
-          <div className="space-y-8">
-            <ContentOverviewMetrics />
-            <ContentOverviewTable />
-            <ContentEngagementChart />
-          </div>
-        );
-      case 'engagement':
-        return (
-          <div className="space-y-8">
-            <EngagementOverviewMetrics />
-            <EngagementResponseList />
-          </div>
-        );
-      default:
-        return <div className="text-center py-12 text-[#B0B3BA]">Content for {activeTab} tab coming soon</div>;
     }
   };
 
@@ -108,8 +63,8 @@ export function GeneralDashboard() {
             {navItems.map((item) => (
               <div 
                 key={item.id}
-                className={`nav-item ${item.id === activeTab ? 'active' : ''}`}
-                onClick={() => setActiveTab(item.id as TabType)}
+                className={`nav-item ${location.pathname === `/dashboard/${item.id}` ? 'active' : ''}`}
+                onClick={() => navigate(`/dashboard/${item.id}`)}
                 role="button"
                 tabIndex={0}
               >
@@ -137,23 +92,95 @@ export function GeneralDashboard() {
 
       {/* Main Content */}
       <main className="flex-1 pl-28 pr-4 py-4">
-        {/* Header */}
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-xl font-medium tracking-wide">
-            {navItems.find(item => item.id === activeTab)?.label || 'Insights'}
-          </h1>
-          <div className="profile-image-container">
-            <img 
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
-              alt="Profile" 
-              className="profile-image"
-            />
-          </div>
-        </header>
+        <Routes>
+          {/* Detail Routes */}
+          <Route path="/members/:id" element={<MemberDetails />} />
+          <Route path="/events/:id" element={<EventDetails />} />
+          <Route path="/engagements/:id" element={<EngagementDetails />} />
+          <Route path="/content/:id" element={<ContentDetails />} />
+          <Route path="/deals/:id" element={<DealDetails />} />
 
-        {/* Content */}
-        {renderTabContent()}
+          {/* Main Section Routes */}
+          <Route path="/key-metrics" element={
+            <DashboardLayout>
+              <KeyMetrics />
+            </DashboardLayout>
+          } />
+          
+          <Route path="/members" element={
+            <DashboardLayout>
+              <div className="space-y-8">
+                <MembersOverviewMetrics />
+                <MembersOverviewTable />
+                <MemberActivityChart />
+              </div>
+            </DashboardLayout>
+          } />
+
+          <Route path="/deals" element={
+            <DashboardLayout>
+              <div className="space-y-8">
+                <DealsOverview />
+              </div>
+            </DashboardLayout>
+          } />
+
+          <Route path="/events" element={
+            <DashboardLayout>
+              <div className="space-y-8">
+                <EventOverviewMetrics />
+                <EventsOverview />
+              </div>
+            </DashboardLayout>
+          } />
+
+          <Route path="/content" element={
+            <DashboardLayout>
+              <div className="space-y-8">
+                <ContentOverviewMetrics />
+                <ContentOverviewTable />
+                <ContentEngagementChart />
+              </div>
+            </DashboardLayout>
+          } />
+
+          <Route path="/engagement" element={
+            <DashboardLayout>
+              <div className="space-y-8">
+                <EngagementOverviewMetrics />
+                <EngagementResponseList />
+              </div>
+            </DashboardLayout>
+          } />
+
+          {/* Redirect root to key-metrics */}
+          <Route path="/" element={<Navigate to="/dashboard/key-metrics" replace />} />
+        </Routes>
       </main>
     </div>
+  );
+}
+
+// Helper component for consistent layout across routes
+function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const currentTab = location.pathname.replace('/dashboard/', ''); // Updated path extraction
+  
+  return (
+    <>
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-xl font-medium tracking-wide">
+          {navItems.find(item => item.id === currentTab)?.label || 'Insights'}
+        </h1>
+        <div className="profile-image-container">
+          <img 
+            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
+            alt="Profile" 
+            className="profile-image"
+          />
+        </div>
+      </header>
+      {children}
+    </>
   );
 }

@@ -132,7 +132,7 @@ export const EventsOverview: React.FC = () => {
   };
 
   const handleEventClick = (eventId: number) => {
-    navigate(`/events/${eventId}`);
+    navigate(`/dashboard/events/${eventId}`);
   };
 
   return (

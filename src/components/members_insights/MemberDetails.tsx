@@ -2,14 +2,9 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
-  MessageSquare, 
-  Calendar, 
-  Activity,
   Heart,
   Shield,
   Leaf,
-  BarChart3,
-  LineChart
 } from 'lucide-react';
 import {
   AreaChart,
@@ -216,7 +211,7 @@ export const MemberDetails: React.FC = () => {
                 content={<CustomTooltip />}
                 cursor={{ 
                   fill: 'rgba(255, 255, 255, 0.1)',
-                  radius: [4, 4, 0, 0]
+                  
                 }}
               />
               <Bar 
@@ -281,7 +276,7 @@ export const MemberDetails: React.FC = () => {
                   content={<CustomEventTooltip />}
                   cursor={{ 
                     fill: 'rgba(255, 255, 255, 0.1)',
-                    radius: [4, 4, 0, 0]
+                    
                   }}
                 />
                 <Bar 
