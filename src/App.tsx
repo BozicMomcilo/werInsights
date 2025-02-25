@@ -1,11 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { 
   LineChart, 
   Users,
   Briefcase,
   Calendar,
   FileText,
-  Activity
+  Activity,
+  LogOut
 } from 'lucide-react';
 import { KeyMetrics } from './components/general_insights/KeyMetrics';
 import { MembersOverviewTable } from './components/members_insights/MembersOverviewTable';
@@ -26,6 +27,8 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { useState } from 'react';
 import { EngagementResponseList } from './components/engagement_insights/EngagementResponseList';
 import { MemberDetails } from './components/members_insights/MemberDetails';
+import { auth } from './lib/auth/auth';
+import { useNavigate } from 'react-router-dom';
 
 export type TabType = 'key-metrics' | 'members' | 'deals' | 'events' | 'content' | 'engagement';
 
@@ -40,6 +43,16 @@ const navItems = [
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('key-metrics');
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+      navigate('/signin');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -110,56 +123,66 @@ function App() {
   };
 
   return (
-    <Router>
-      <ThemeProvider>
-        <div className="flex min-h-screen">
-          {/* Sidebar */}
-          <aside className="sidebar">
-            <div className="flex flex-col h-full">
-              <div className="flex justify-center py-8">
-                <Logo />
-              </div>
-              <nav className="flex flex-col flex-1 px-4 space-y-4">
-                {navItems.map((item) => (
-                  <div 
-                    key={item.id}
-                    className={`nav-item ${item.id === activeTab ? 'active' : ''}`}
-                    onClick={() => setActiveTab(item.id as TabType)}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <item.icon className="w-6 h-6 flex-shrink-0" />
-                    <span className="font-medium">{item.label}</span>
-                  </div>
-                ))}
-                <div className="flex-1" />
-                <ThemeSwitcher />
-              </nav>
+    <ThemeProvider>
+      <div className="flex min-h-screen">
+        {/* Sidebar */}
+        <aside className="sidebar">
+          <div className="flex flex-col h-full">
+            <div className="flex justify-center py-8">
+              <Logo />
             </div>
-          </aside>
-
-          {/* Main Content */}
-          <main className="flex-1 pl-28 pr-4 py-4">
-            {/* Header */}
-            <header className="flex justify-between items-center mb-8">
-              <h1 className="text-xl font-medium tracking-wide">
-                {navItems.find(item => item.id === activeTab)?.label || 'Insights'}
-              </h1>
-              <div className="profile-image-container">
-                <img 
-                  src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
-                  alt="Profile" 
-                  className="profile-image"
-                />
+            <nav className="flex flex-col flex-1 px-4 space-y-4">
+              {navItems.map((item) => (
+                <div 
+                  key={item.id}
+                  className={`nav-item ${item.id === activeTab ? 'active' : ''}`}
+                  onClick={() => setActiveTab(item.id as TabType)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <item.icon className="w-6 h-6 flex-shrink-0" />
+                  <span className="font-medium">{item.label}</span>
+                </div>
+              ))}
+              <div className="flex-1" />
+              <ThemeSwitcher />
+              <div className="px-2 py-4">
+                <div className="border-t border-white/10" />
               </div>
-            </header>
+              <div className="pb-2">
+                <button
+                  onClick={handleSignOut}
+                  className="nav-item text-[#FF3B3B] hover:bg-[#FF3B3B]/10"
+                >
+                  <LogOut className="w-6 h-6 flex-shrink-0" />
+                  <span className="font-medium">Sign Out</span>
+                </button>
+              </div>
+            </nav>
+          </div>
+        </aside>
 
-            {/* Content */}
-            {renderTabContent()}
-          </main>
-        </div>
-      </ThemeProvider>
-    </Router>
+        {/* Main Content */}
+        <main className="flex-1 pl-28 pr-4 py-4">
+          {/* Header */}
+          <header className="flex justify-between items-center mb-8">
+            <h1 className="text-xl font-medium tracking-wide">
+              {navItems.find(item => item.id === activeTab)?.label || 'Insights'}
+            </h1>
+            <div className="profile-image-container">
+              <img 
+                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
+                alt="Profile" 
+                className="profile-image"
+              />
+            </div>
+          </header>
+
+          {/* Content */}
+          {renderTabContent()}
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 
