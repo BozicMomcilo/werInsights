@@ -17,6 +17,7 @@ import { EventsOverview } from './components/events_insights/EventsOverview';
 import { EventDetails } from './components/events_insights/EventDetails';
 import { ContentOverviewMetrics } from './components/content_insights/ContentOverviewMetrics';
 import { ContentOverviewTable } from './components/content_insights/ContentOverviewTable';
+import { ContentDetails } from './components/content_insights/ContentDetails';
 import { EngagementOverviewMetrics } from './components/engagement_insights/EngagementOverviewMetrics';
 import { EngagementDetails } from './components/engagement_insights/EngagementDetails';
 import { Logo } from './components/shared/Logo';  
@@ -81,10 +82,15 @@ function App() {
         );
       case 'content':
         return (
-          <div className="space-y-8">
-            <ContentOverviewMetrics />
-            <ContentOverviewTable />
-          </div>
+          <Routes>
+            <Route path="/" element={
+              <div className="space-y-8">
+                <ContentOverviewMetrics />
+                <ContentOverviewTable />
+              </div>
+            } />
+            <Route path="/content/:id" element={<ContentDetails />} />
+          </Routes>
         );
       case 'engagement':
         return (
