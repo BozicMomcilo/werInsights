@@ -1,25 +1,30 @@
 import React from 'react';
 import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
-const MetricCard = ({ title, value, change, sparkline }: { title: string, value: string, change: string, sparkline: string }) => (
-  <div className="metric-card">
-    <div className="flex justify-between items-start mb-4">
-      <div>
-        <h3 className="text-[#B0B3BA] text-sm font-medium mb-2">{title}</h3>
-        <div className="metric-value">{value}</div>
+const MetricCard = ({ title, value, change, trend }: { title: string, value: string, change: string, trend: 'up' | 'down' }) => {
+  const TrendIcon = trend === 'up' ? ArrowUpRight : ArrowDownRight;
+  const trendColor = trend === 'up' ? 'text-[#28E0B9]' : 'text-[#FF3B3B]';
+  
+  return (
+    <div className="metric-card">
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <h3 className="text-[#B0B3BA] text-sm font-medium mb-2">{title}</h3>
+          <div className="metric-value">{value}</div>
+        </div>
+        <div className="w-10 h-10 rounded-full glass-panel flex items-center justify-center">
+          <TrendIcon className={`w-5 h-5 ${trendColor}`} />
+        </div>
       </div>
-      <div className="w-24 h-12">
-        <svg className="w-full h-full">
-          <path d={sparkline} className="sparkline" />
-        </svg>
+      <div className="flex items-center text-sm">
+        <span className={`font-medium ${trendColor}`}>
+          {trend === 'up' ? '↑' : '↓'} {change}%
+        </span>
+        <span className="text-[#B0B3BA] ml-2">Since last month</span>
       </div>
     </div>
-    <div className="flex items-center text-sm">
-      <span className="text-[#FFE8AC] font-medium">↑ {change}%</span>
-      <span className="text-[#B0B3BA] ml-2">Since last week</span>
-    </div>
-  </div>
-);
+  );
+};
 
 export const KeyMetrics: React.FC = () => {
   return (
@@ -27,62 +32,38 @@ export const KeyMetrics: React.FC = () => {
       {/* Metrics Grid */}
       <div className="grid grid-cols-3 gap-6">
         <MetricCard 
-          title="Total Investment Volume" 
-          value="215M" 
-          change="37.7"
-          sparkline="M0,40 C20,35 40,45 60,30 S80,45 100,35" 
+          title="Total Deals" 
+          value="1,200" 
+          change="10"
+          trend="down"
         />
         <MetricCard 
-          title="Total ROI Achieved" 
-          value="11" 
-          change="32.7"
-          sparkline="M0,35 C20,45 40,30 60,50 S80,25 100,40" 
+          title="Total Events" 
+          value="150" 
+          change="5"
+          trend="up"
         />
         <MetricCard 
-          title="Active Investors" 
-          value="847" 
-          change="12.3"
-          sparkline="M0,45 C20,40 40,35 60,45 S80,30 100,35" 
+          title="Total Engagements" 
+          value="25,000" 
+          change="15"
+          trend="up"
         />
       </div>
 
-      {/* Performance Overview */}
-      <div className="glass-panel p-6">
-        <h2 className="section-title mb-6">Performance Overview</h2>
-        <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div className="flex justify-between items-center p-4 glass-panel">
-              <div>
-                <div className="text-sm text-[#B0B3BA] mb-1">Portfolio Growth</div>
-                <div className="text-2xl font-medium text-[#FFE8AC]">+24.8%</div>
-              </div>
-              <ArrowUpRight className="w-6 h-6 text-[#28E0B9]" />
-            </div>
-            <div className="flex justify-between items-center p-4 glass-panel">
-              <div>
-                <div className="text-sm text-[#B0B3BA] mb-1">Investor Satisfaction</div>
-                <div className="text-2xl font-medium text-[#FFE8AC]">92%</div>
-              </div>
-              <ArrowUpRight className="w-6 h-6 text-[#28E0B9]" />
-            </div>
-          </div>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center p-4 glass-panel">
-              <div>
-                <div className="text-sm text-[#B0B3BA] mb-1">Risk Assessment</div>
-                <div className="text-2xl font-medium text-[#FFE8AC]">Low</div>
-              </div>
-              <ArrowDownRight className="w-6 h-6 text-[#72A0D6]" />
-            </div>
-            <div className="flex justify-between items-center p-4 glass-panel">
-              <div>
-                <div className="text-sm text-[#B0B3BA] mb-1">Market Position</div>
-                <div className="text-2xl font-medium text-[#FFE8AC]">Strong</div>
-              </div>
-              <ArrowUpRight className="w-6 h-6 text-[#28E0B9]" />
-            </div>
-          </div>
-        </div>
+      <div className="grid grid-cols-2 gap-6">
+        <MetricCard 
+          title="Active Members" 
+          value="3,400" 
+          change="8"
+          trend="up"
+        />
+        <MetricCard 
+          title="Avg. Content Read Rate" 
+          value="75%" 
+          change="5"
+          trend="up"
+        />
       </div>
     </div>
   );
