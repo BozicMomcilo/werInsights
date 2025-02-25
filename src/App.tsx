@@ -17,12 +17,13 @@ import { EventsOverview } from './components/events_insights/EventsOverview';
 import { EventDetails } from './components/events_insights/EventDetails';
 import { ContentOverviewMetrics } from './components/content_insights/ContentOverviewMetrics';
 import { ContentOverviewTable } from './components/content_insights/ContentOverviewTable';
-import { EngagementOverviewTable } from './components/engagement_insights/EngagementOverviewTable';
 import { EngagementOverviewMetrics } from './components/engagement_insights/EngagementOverviewMetrics';
+import { EngagementDetails } from './components/engagement_insights/EngagementDetails';
 import { Logo } from './components/shared/Logo';  
 import { ThemeSwitcher } from './components/shared/ThemeSwitcher';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { useState } from 'react';
+import { EngagementResponseList } from './components/engagement_insights/EngagementResponseList';
 
 export type TabType = 'key-metrics' | 'members' | 'deals' | 'events' | 'content' | 'engagement';
 
@@ -81,10 +82,15 @@ function App() {
         );
       case 'engagement':
         return (
-          <div className="space-y-8">
-            <EngagementOverviewMetrics />
-            <EngagementOverviewTable />
-          </div>
+          <Routes>
+            <Route path="/" element={
+              <div className="space-y-8">
+                <EngagementOverviewMetrics />
+                <EngagementResponseList />
+              </div>
+            } />
+            <Route path="/engagement/:id" element={<EngagementDetails />} />
+          </Routes>
         );
       default:
         return <div className="text-center py-12 text-[#B0B3BA]">Content for {activeTab} tab coming soon</div>;

@@ -10,12 +10,11 @@ import { ContentOverviewMetrics } from "../../content_insights/ContentOverviewMe
 import { ContentOverviewTable } from "../../content_insights/ContentOverviewTable";
 import { ContentEngagementChart } from "../../content_insights/ContentEngagementChart";
 import { EngagementOverviewMetrics } from "../../engagement_insights/EngagementOverviewMetrics";
-import { EngagementOverviewTable } from "../../engagement_insights/EngagementOverviewTable";
-import { EngagementTimeline } from "../../engagement_insights/EngagementTimeline";
 import { Logo } from "../../shared/Logo";
 import { Layers, LayoutDashboard, MapPin, MessageCircle, Settings } from "lucide-react";
 import { LineChart } from "lucide-react";
 import { TabType } from "../../../App";
+import { EngagementResponseList } from "../../engagement_insights/EngagementResponseList";
 
 
 const navItems = [
@@ -67,8 +66,7 @@ export function Dashboard() {
           return (
             <div className="space-y-8">
               <EngagementOverviewMetrics />
-              <EngagementOverviewTable />
-              <EngagementTimeline />
+              <EngagementResponseList />
             </div>
           );
         default:
