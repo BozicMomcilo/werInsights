@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Filter, FileText, PlayCircle, FileSpreadsheet, BookOpen, FileEdit, Newspaper, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Filter, FileText, BookOpen, FileEdit, Newspaper, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 // Extended content data with status and more items
@@ -248,7 +248,6 @@ const ContentTable: React.FC<{
             <th className="text-left pb-4">Type</th>
             <th className="text-left pb-4">Author</th>
             <th className="text-left pb-4">Published Date</th>
-            <th className="text-right pb-4">Engagement</th>
           </tr>
         </thead>
         <tbody className="font-light">
@@ -303,9 +302,6 @@ const ContentTable: React.FC<{
                   </div>
                 </td>
                 <td className="py-4 text-[#B0B3BA]">{item.published_date}</td>
-                <td className="py-4 text-right">
-                  <div className="text-[#28E0B9] font-medium">{item.engagement_rate}</div>
-                </td>
               </tr>
             );
           })}
@@ -373,7 +369,6 @@ export const ContentOverviewTable: React.FC = () => {
               className="bg-transparent border-none text-sm focus:outline-none"
             >
               <option value="date">Sort by Date</option>
-              <option value="engagement">Sort by Engagement</option>
               <option value="title">Sort by Title</option>
             </select>
           </div>

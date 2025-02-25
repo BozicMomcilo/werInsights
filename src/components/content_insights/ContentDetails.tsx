@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, FileText, Users, Eye, BookOpen, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, FileText, Users, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Sample readers data - expanded for pagination demonstration
 const readers = [
@@ -224,20 +224,6 @@ export const ContentDetails: React.FC = () => {
                 <span className="text-[#B0B3BA]">Unique Readers</span>
               </div>
               <span className="font-medium">{content.metrics.unique_readers}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-[#72A0D6]" />
-                <span className="text-[#B0B3BA]">Average Time</span>
-              </div>
-              <span className="font-medium">{content.metrics.average_time}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <BookOpen className="w-4 h-4 text-[#72A0D6]" />
-                <span className="text-[#B0B3BA]">Completion Rate</span>
-              </div>
-              <span className="font-medium">{content.metrics.completion_rate}</span>
             </div>
           </div>
         </div>
