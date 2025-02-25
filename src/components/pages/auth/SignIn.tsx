@@ -4,6 +4,7 @@ import { auth } from '../../../lib/auth/auth'
 import { Logo } from '../../shared/Logo'
 import { Mail, Lock, Loader } from 'lucide-react'
 import { isSupabaseConfigured } from '../../../lib/supabase/supabaseClient'
+import loginBackground from '../../../assets/images/login_background.png'
 
 export const SignIn = () => {
   const navigate = useNavigate()
@@ -49,8 +50,20 @@ export const SignIn = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0A101A] p-4">
-      <div className="glass-panel p-8 w-full max-w-sm space-y-8">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{
+        backgroundImage: `url(${loginBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <div className="glass-panel p-8 w-full max-w-sm space-y-8" style={{
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+      }}>
         <div className="flex flex-col items-center space-y-4">
           <Logo />
           <h1 className="text-2xl font-semibold text-white">Welcome Back</h1>
