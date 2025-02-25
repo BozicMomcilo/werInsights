@@ -26,6 +26,10 @@ import { ContentEngagementChart } from "../../content_insights/ContentEngagement
 import { EngagementOverviewMetrics } from "../../engagement_insights/EngagementOverviewMetrics";
 import { EngagementResponseList } from "../../engagement_insights/EngagementResponseList";
 import { MemberDetails } from '../../members_insights/MemberDetails';
+import { EventDetails } from '../../events_insights/EventDetails';
+import { EngagementDetails } from '../../engagement_insights/EngagementDetails';
+import { ContentDetails } from '../../content_insights/ContentDetails';
+import { DealDetails } from '../../deal_insights/DealDetails';
 
 export type TabType = 'key-metrics' | 'members' | 'deals' | 'events' | 'content' | 'engagement';
 
@@ -137,22 +141,33 @@ export function GeneralDashboard() {
 
       {/* Main Content */}
       <main className="flex-1 pl-28 pr-4 py-4">
-        {/* Header */}
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-xl font-medium tracking-wide">
-            {navItems.find(item => item.id === activeTab)?.label || 'Insights'}
-          </h1>
-          <div className="profile-image-container">
-            <img 
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
-              alt="Profile" 
-              className="profile-image"
-            />
-          </div>
-        </header>
+        <Routes>
+          <Route path="/members/:id" element={<MemberDetails />} />
+          <Route path="/events/:id" element={<EventDetails />} />
+          <Route path="/engagements/:id" element={<EngagementDetails />} />
+          <Route path="/content/:id" element={<ContentDetails />} />
+          <Route path="/deals/:id" element={<DealDetails />} />
+          <Route path="*" element={
+            <>
+              {/* Header */}
+              <header className="flex justify-between items-center mb-8">
+                <h1 className="text-xl font-medium tracking-wide">
+                  {navItems.find(item => item.id === activeTab)?.label || 'Insights'}
+                </h1>
+                <div className="profile-image-container">
+                  <img 
+                    src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
+                    alt="Profile" 
+                    className="profile-image"
+                  />
+                </div>
+              </header>
 
-        {/* Content */}
-        {renderTabContent()}
+              {/* Content */}
+              {renderTabContent()}
+            </>
+          } />
+        </Routes>
       </main>
     </div>
   );

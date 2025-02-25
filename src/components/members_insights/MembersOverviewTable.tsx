@@ -103,7 +103,7 @@ export const MembersOverviewTable: React.FC = () => {
   };
 
   const handleMemberClick = (memberId: number) => {
-    navigate(`/members/${memberId}`);
+    navigate(`/dashboard/members/${memberId}`);
   };
 
   return (
@@ -169,6 +169,13 @@ export const MembersOverviewTable: React.FC = () => {
                 key={member.id} 
                 className="border-t border-white/5 hover:bg-[#72A0D6]/5 transition-colors cursor-pointer"
                 onClick={() => handleMemberClick(member.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleMemberClick(member.id);
+                  }
+                }}
               >
                 <td className="py-4">
                   <div className="flex items-center space-x-3">

@@ -235,7 +235,7 @@ const ContentTable: React.FC<{
   const totalPages = Math.ceil(content.length / itemsPerPage);
 
   const handleContentClick = (contentId: number) => {
-    navigate(`/content/${contentId}`);
+    navigate(`/dashboard/content/${contentId}`);
   };
 
   return (

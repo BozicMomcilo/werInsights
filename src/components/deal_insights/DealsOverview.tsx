@@ -102,7 +102,7 @@ export const DealsOverview: React.FC = () => {
   };
 
   const handleDealClick = (dealId: number) => {
-    navigate(`/deals/${dealId}`);
+    navigate(`/dashboard/deals/${dealId}`);
   };
 
   useEffect(() => {
