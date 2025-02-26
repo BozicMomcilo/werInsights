@@ -23,10 +23,11 @@ import { ContentOverviewMetrics } from "../../content_insights/ContentOverviewMe
 import { ContentOverviewTable } from "../../content_insights/ContentOverviewTable";
 import { ContentEngagementChart } from "../../content_insights/ContentEngagementChart";
 import { EngagementOverviewMetrics } from "../../engagement_insights/EngagementOverviewMetrics";
-import { EngagementResponseList } from "../../engagement_insights/EngagementResponseList";
+import { EngagementOverviewTable } from "../../engagement_insights/EngagementOverviewTable";
 import { MemberDetails } from '../../members_insights/MemberDetails';
 import { EventDetails } from '../../events_insights/EventDetails';
 import { EngagementDetails } from '../../engagement_insights/EngagementDetails';
+import { ResponseDetails } from '../../engagement_insights/ResponseDetails';
 import { ContentDetails } from '../../content_insights/ContentDetails';
 import { DealDetails } from '../../deal_insights/DealDetails';
 
@@ -97,6 +98,7 @@ export function GeneralDashboard() {
           <Route path="/members/:id" element={<MemberDetails />} />
           <Route path="/events/:id" element={<EventDetails />} />
           <Route path="/engagements/:id" element={<EngagementDetails />} />
+          <Route path="/engagements/:id/responses" element={<ResponseDetails />} />
           <Route path="/content/:id" element={<ContentDetails />} />
           <Route path="/deals/:id" element={<DealDetails />} />
 
@@ -148,7 +150,7 @@ export function GeneralDashboard() {
             <DashboardLayout>
               <div className="space-y-8">
                 <EngagementOverviewMetrics />
-                <EngagementResponseList />
+                <EngagementOverviewTable />
               </div>
             </DashboardLayout>
           } />
@@ -164,7 +166,7 @@ export function GeneralDashboard() {
 // Helper component for consistent layout across routes
 function DashboardLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-  const currentTab = location.pathname.replace('/dashboard/', ''); // Updated path extraction
+  const currentTab = location.pathname.replace('/dashboard/', '');
   
   return (
     <>
