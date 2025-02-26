@@ -12,6 +12,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../../../lib/auth/auth';
 import { Logo } from '../../shared/Logo';
 import { ThemeSwitcher } from '../../shared/ThemeSwitcher';
+import { UserProfileDetails } from '../../shared/UserProfileDetails';
 import { KeyMetrics } from "../../general_insights/KeyMetrics";
 import { MembersOverviewTable } from "../../members_insights/MembersOverviewTable";
 import { MembersOverviewMetrics } from "../../members_insights/MembersOverviewMetrics";
@@ -30,6 +31,7 @@ import { EngagementDetails } from '../../engagement_insights/EngagementDetails';
 import { ResponseDetails } from '../../engagement_insights/ResponseDetails';
 import { ContentDetails } from '../../content_insights/ContentDetails';
 import { DealDetails } from '../../deal_insights/DealDetails';
+import { useState } from 'react';
 
 const navItems = [
   { icon: LineChart, label: 'Key Metrics', id: 'key-metrics' },
@@ -42,6 +44,7 @@ const navItems = [
 
 export function GeneralDashboard() {
   const navigate = useNavigate();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -104,13 +107,13 @@ export function GeneralDashboard() {
 
           {/* Main Section Routes */}
           <Route path="/key-metrics" element={
-            <DashboardLayout>
+            <DashboardLayout onProfileClick={() => setIsProfileOpen(true)}>
               <KeyMetrics />
             </DashboardLayout>
           } />
           
           <Route path="/members" element={
-            <DashboardLayout>
+            <DashboardLayout onProfileClick={() => setIsProfileOpen(true)}>
               <div className="space-y-8">
                 <MembersOverviewMetrics />
                 <MembersOverviewTable />
@@ -120,7 +123,7 @@ export function GeneralDashboard() {
           } />
 
           <Route path="/deals" element={
-            <DashboardLayout>
+            <DashboardLayout onProfileClick={() => setIsProfileOpen(true)}>
               <div className="space-y-8">
                 <DealsOverview />
               </div>
@@ -128,7 +131,7 @@ export function GeneralDashboard() {
           } />
 
           <Route path="/events" element={
-            <DashboardLayout>
+            <DashboardLayout onProfileClick={() => setIsProfileOpen(true)}>
               <div className="space-y-8">
                 <EventOverviewMetrics />
                 <EventsOverview />
@@ -137,7 +140,7 @@ export function GeneralDashboard() {
           } />
 
           <Route path="/content" element={
-            <DashboardLayout>
+            <DashboardLayout onProfileClick={() => setIsProfileOpen(true)}>
               <div className="space-y-8">
                 <ContentOverviewMetrics />
                 <ContentOverviewTable />
@@ -147,7 +150,7 @@ export function GeneralDashboard() {
           } />
 
           <Route path="/engagement" element={
-            <DashboardLayout>
+            <DashboardLayout onProfileClick={() => setIsProfileOpen(true)}>
               <div className="space-y-8">
                 <EngagementOverviewMetrics />
                 <EngagementOverviewTable />
@@ -158,13 +161,18 @@ export function GeneralDashboard() {
           {/* Redirect root to key-metrics */}
           <Route path="/" element={<Navigate to="/dashboard/key-metrics" replace />} />
         </Routes>
+
+        <UserProfileDetails 
+          isOpen={isProfileOpen}
+          onClose={() => setIsProfileOpen(false)}
+        />
       </main>
     </div>
   );
 }
 
 // Helper component for consistent layout across routes
-function DashboardLayout({ children }: { children: React.ReactNode }) {
+function DashboardLayout({ children, onProfileClick }: { children: React.ReactNode, onProfileClick: () => void }) {
   const location = useLocation();
   const currentTab = location.pathname.replace('/dashboard/', '');
   
@@ -174,13 +182,16 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
         <h1 className="text-xl font-medium tracking-wide">
           {navItems.find(item => item.id === currentTab)?.label || 'Insights'}
         </h1>
-        <div className="profile-image-container">
+        <button 
+          onClick={onProfileClick}
+          className="profile-image-container"
+        >
           <img 
             src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=160&h=160&q=80&fit=crop" 
             alt="Profile" 
             className="profile-image"
           />
-        </div>
+        </button>
       </header>
       {children}
     </>
