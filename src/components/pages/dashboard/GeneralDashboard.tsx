@@ -27,6 +27,7 @@ import { EngagementOverviewTable } from "../../engagement_insights/EngagementOve
 import { MemberDetails } from '../../members_insights/MemberDetails';
 import { EventDetails } from '../../events_insights/EventDetails';
 import { EngagementDetails } from '../../engagement_insights/EngagementDetails';
+import { ResponseDetails } from '../../engagement_insights/ResponseDetails';
 import { ContentDetails } from '../../content_insights/ContentDetails';
 import { DealDetails } from '../../deal_insights/DealDetails';
 
@@ -97,6 +98,7 @@ export function GeneralDashboard() {
           <Route path="/members/:id" element={<MemberDetails />} />
           <Route path="/events/:id" element={<EventDetails />} />
           <Route path="/engagements/:id" element={<EngagementDetails />} />
+          <Route path="/engagements/:id/responses" element={<ResponseDetails />} />
           <Route path="/content/:id" element={<ContentDetails />} />
           <Route path="/deals/:id" element={<DealDetails />} />
 
