@@ -3,13 +3,13 @@ import { Calendar,  Globe, Briefcase, ChevronLeft, ChevronRight } from 'lucide-r
 import { useNavigate } from 'react-router-dom';
 import { PersonService } from '../../models/services/PersonService';
 import { Person } from '../../models/interfaces/Person';
-import { ImageSource } from '../../models/interfaces/ImageResource';
 import { MemberType } from '../../models/interfaces/MemberType';
 import { Subscription } from 'rxjs';
 import { InitialsAvatar } from '../shared/InitialsAvatar';
 import { createPersonCommitmentStream } from '../../utils/PersonHelpers';
 import { ItemService } from '../../models/services/ItemService';
 import { CommitmentService } from '../../models/services/CommitmentService';
+import { getImageUrl } from '../../utils/ImageHelpers';
 
 const getMemberTypeColor = (type?: MemberType) => {
   switch (type) {
@@ -46,6 +46,9 @@ export const MembersOverviewTable: React.FC = () => {
 
   useEffect(() => {
     const subscriptions: Subscription[] = [];
+
+    // Explicitly fetch initial data
+    personService.fetchPersons(1);
 
     // Subscribe to persons updates
     subscriptions.push(
@@ -158,26 +161,6 @@ export const MembersOverviewTable: React.FC = () => {
     }
 
     return pageNumbers;
-  };
-
-  const getClosestImageSource = (sources: ImageSource[], targetSize: number) => {
-    if (!sources || sources.length === 0) return null;
-    return sources.reduce((prev, curr) => {
-      const prevDiff = Math.abs(prev.width - targetSize);
-      const currDiff = Math.abs(curr.width - targetSize);
-      return currDiff < prevDiff ? curr : prev;
-    });
-  };
-
-  const getImageUrl = (member: Person) => {
-    if (!member.profile_image?.sources) {
-      return '';
-    }
-    const source = getClosestImageSource(member.profile_image.sources, 40);
-    if (!source) {
-      return '';
-    }
-    return source.url.replace('{{BUCKET_ROOT_PUBLIC}}', import.meta.env.VITE_BUCKET_ROOT_PUBLIC || '');
   };
 
   const handleImageError = (memberId: string) => {
