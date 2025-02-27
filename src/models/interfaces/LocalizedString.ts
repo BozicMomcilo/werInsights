@@ -1,3 +1,6 @@
 export interface LocalizedString {
-    [key: string]: string; // Format: 'en', 'de', 'fr', etc.
+    id: string;
+    localizedValue: {
+        [key: string]: string; // Format: 'en', 'de', 'fr', etc.
+    };
 } 

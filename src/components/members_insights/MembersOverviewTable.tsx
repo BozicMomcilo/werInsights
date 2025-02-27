@@ -11,9 +11,9 @@ import { InitialsAvatar } from '../shared/InitialsAvatar';
 const getMemberTypeColor = (type?: MemberType) => {
   switch (type) {
     case MemberType.CO_INVESTOR:
-      return 'text-[#72A0D6]';
+      return 'text-[#FFE8AC]';
     case MemberType.CO_CREATOR:
-      return 'text-[#28E0B9]';
+      return 'text-[#72A0D6]';
     case MemberType.INTERNAL:
       return 'text-white';
     default:
@@ -32,6 +32,7 @@ export const MembersOverviewTable: React.FC = () => {
   const [members, setMembers] = useState<Person[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalPersons, setTotalPersons] = useState(0);
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   
   // Memoize the PersonService instance
@@ -43,7 +44,6 @@ export const MembersOverviewTable: React.FC = () => {
     // Subscribe to persons updates
     subscriptions.push(
       personService.persons$.subscribe(persons => {
-        console.log('Member Types:', persons.map(person => person.member_type));
         setMembers(persons);
       })
     );
@@ -59,6 +59,13 @@ export const MembersOverviewTable: React.FC = () => {
     subscriptions.push(
       personService.currentPage$.subscribe(page => {
         setCurrentPage(page);
+      })
+    );
+
+    // Subscribe to total persons count
+    subscriptions.push(
+      personService.totalPersons$.subscribe(count => {
+        setTotalPersons(count);
       })
     );
 
@@ -209,10 +216,10 @@ export const MembersOverviewTable: React.FC = () => {
         <table className="w-full">
           <thead>
             <tr className="text-[#B0B3BA] text-sm font-medium">
-              <th className="text-left pb-4">Member</th>
-              <th className="text-left pb-4">Type</th>
-              <th className="text-left pb-4">Country</th>
-              <th className="text-right pb-4">Committed Volume</th>
+              <th className="text-left pb-4 w-[35%]">Member</th>
+              <th className="text-left pb-4 w-[15%]">Type</th>
+              <th className="text-left pb-4 w-[35%]">Country</th>
+              <th className="text-left pb-4 w-[15%]">Committed Volume</th>
             </tr>
           </thead>
           <tbody className="font-light">
@@ -229,7 +236,7 @@ export const MembersOverviewTable: React.FC = () => {
                   }
                 }}
               >
-                <td className="py-4">
+                <td className="py-4 w-[35%]">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-white/10 hover:ring-[#72A0D6]/30 transition-all duration-300">
                       {getImageUrl(member) && !failedImages.has(member.id) ? (
@@ -249,22 +256,20 @@ export const MembersOverviewTable: React.FC = () => {
                     <span className="font-medium">{getFullName(member)}</span>
                   </div>
                 </td>
-                <td className="py-4">
-                  <div className="flex items-center space-x-2">
-                    <div className={`${getMemberTypeColor(member.member_type)} font-medium flex items-center`}>
-                      <Briefcase className="w-4 h-4 mr-2" />
+                <td className="py-4 w-[15%]">
+                  <div className="flex items-center">
+                    <div className={`${getMemberTypeColor(member.member_type)} font-medium`}>
                       {member.member_type || 'Unknown'}
                     </div>
                   </div>
                 </td>
-                <td className="py-4">
-                  <div className="flex items-center space-x-2">
-                    <Globe className="w-4 h-4 text-[#FFE8AC]" />
+                <td className="py-4 w-[35%]">
+                  <div className="flex items-center">
                     <span>{member.tax_residence || 'Unknown'}</span>
                   </div>
                 </td>
-                <td className="py-4 text-right">
-                  <span className="text-[#72A0D6] font-semibold text-lg">
+                <td className="py-4 text-left w-[15%]">
+                  <span className="text-white font-semibold text-lg">
                     ${getCommittedVolume(member)}
                   </span>
                 </td>
@@ -276,7 +281,7 @@ export const MembersOverviewTable: React.FC = () => {
         {/* Pagination Controls */}
         <div className="flex justify-between items-center mt-6 pt-4 border-t border-white/5">
           <div className="text-sm text-[#B0B3BA]">
-            Showing {((currentPage - 1) * 5) + 1} to {Math.min(currentPage * 5, members.length)} of {members.length} members
+            Showing {((currentPage - 1) * 5) + 1} to {Math.min(currentPage * 5, totalPersons)} of {totalPersons} members
           </div>
           <div className="flex items-center space-x-2">
             <button
@@ -329,7 +334,7 @@ export const MembersOverviewTable: React.FC = () => {
               </div>
             </div>
             <div className="text-[#B0B3BA]">
-              Total Members: {members.length}
+              Total Members: {totalPersons}
             </div>
           </div>
         </div>

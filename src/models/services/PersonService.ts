@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { Person } from '../interfaces/Person';
 import { BehaviorSubject } from 'rxjs';
-import { MemberType, mapToMemberType } from '../interfaces/MemberType';
+import { mapToMemberType } from '../interfaces/MemberType';
 
 const ITEMS_PER_PAGE = 5;
 
@@ -14,10 +14,12 @@ export class PersonService {
     private personsSubject = new BehaviorSubject<Person[]>([]);
     private totalPagesSubject = new BehaviorSubject<number>(0);
     private currentPageSubject = new BehaviorSubject<number>(1);
+    private totalPersonsSubject = new BehaviorSubject<number>(0);
 
     persons$ = this.personsSubject.asObservable();
     totalPages$ = this.totalPagesSubject.asObservable();
     currentPage$ = this.currentPageSubject.asObservable();
+    totalPersons$ = this.totalPersonsSubject.asObservable();
 
     constructor() {
         this.setupRealtimeSubscription();
@@ -51,6 +53,7 @@ export class PersonService {
 
             const totalPages = Math.ceil((count || 0) / ITEMS_PER_PAGE);
             this.totalPagesSubject.next(totalPages);
+            this.totalPersonsSubject.next(count || 0);
 
             // Then fetch the actual data for the current page
             const { data: persons, error } = await this.supabase

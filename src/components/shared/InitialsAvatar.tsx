@@ -1,8 +1,10 @@
 import React from 'react';
+import { LocalizedString } from '../../models/interfaces/LocalizedString';
 
 interface InitialsAvatarProps {
   firstName?: string;
   lastName?: string;
+  title?: LocalizedString;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
@@ -10,10 +12,20 @@ interface InitialsAvatarProps {
 export const InitialsAvatar: React.FC<InitialsAvatarProps> = ({
   firstName = '',
   lastName = '',
+  title,
   size = 'md',
   className = ''
 }) => {
   const getInitials = () => {
+    if (title?.localizedValue?.['en']) {
+      // Handle title case - take first letter of each word
+      return title.localizedValue['en']
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase())
+        .slice(0, 2)
+        .join('') || '?';
+    }
+    // Handle first/last name case
     const firstInitial = firstName ? firstName.charAt(0).toUpperCase() : '';
     const lastInitial = lastName ? lastName.charAt(0).toUpperCase() : '';
     return `${firstInitial}${lastInitial}` || '?';
@@ -35,9 +47,7 @@ export const InitialsAvatar: React.FC<InitialsAvatarProps> = ({
       className={`
         ${getSizeClasses()}
         rounded-full
-        bg-gradient-to-br
-        from-[#72A0D6]
-        to-[#28E0B9]
+        bg-[#72A0D6]
         flex
         items-center
         justify-center
