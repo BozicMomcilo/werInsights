@@ -7,6 +7,9 @@ import { ImageSource } from '../../models/interfaces/ImageResource';
 import { MemberType } from '../../models/interfaces/MemberType';
 import { Subscription } from 'rxjs';
 import { InitialsAvatar } from '../shared/InitialsAvatar';
+import { createPersonCommitmentStream } from '../../utils/PersonHelpers';
+import { ItemService } from '../../models/services/ItemService';
+import { CommitmentService } from '../../models/services/CommitmentService';
 
 const getMemberTypeColor = (type?: MemberType) => {
   switch (type) {
@@ -34,9 +37,12 @@ export const MembersOverviewTable: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalPersons, setTotalPersons] = useState(0);
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
+  const [commitmentVolumes, setCommitmentVolumes] = useState<{[personId: string]: number}>({});
   
-  // Memoize the PersonService instance
+  // Memoize service instances
   const personService = useMemo(() => new PersonService(), []);
+  const itemService = useMemo(() => new ItemService(), []);
+  const commitmentService = useMemo(() => new CommitmentService(), []);
 
   useEffect(() => {
     const subscriptions: Subscription[] = [];
@@ -69,14 +75,24 @@ export const MembersOverviewTable: React.FC = () => {
       })
     );
 
-    // Initial fetch
-    personService.fetchPersons(1);
+    // Subscribe to commitment volumes
+    const commitmentStream = createPersonCommitmentStream(
+      personService,
+      itemService,
+      commitmentService
+    );
+
+    subscriptions.push(
+      commitmentStream.subscribe(volumes => {
+        setCommitmentVolumes(volumes);
+      })
+    );
 
     // Cleanup subscriptions on component unmount
     return () => {
       subscriptions.forEach(sub => sub.unsubscribe());
     };
-  }, [personService]);
+  }, [personService, itemService, commitmentService]);
 
   const handlePageChange = async (pageNumber: number) => {
     await personService.goToPage(pageNumber);
@@ -91,8 +107,12 @@ export const MembersOverviewTable: React.FC = () => {
   };
 
   const getCommittedVolume = (person: Person) => {
-    // This is a placeholder - you might want to calculate this based on your business logic
-    return '0M';
+    const volume = commitmentVolumes[person.id] || 0;
+    if(volume /1000000 < 1) {
+      return `${(volume / 1000).toFixed(2)}K`;
+    }
+    // Format the volume in millions with two decimal place
+    return `${(volume / 1000000).toFixed(2)}M`;
   };
 
   const getPageNumbers = () => {

@@ -15,11 +15,13 @@ export class PersonService {
     private totalPagesSubject = new BehaviorSubject<number>(0);
     private currentPageSubject = new BehaviorSubject<number>(1);
     private totalPersonsSubject = new BehaviorSubject<number>(0);
+    private accumulatedPersonsSubject = new BehaviorSubject<Person[]>([]);
 
     persons$ = this.personsSubject.asObservable();
     totalPages$ = this.totalPagesSubject.asObservable();
     currentPage$ = this.currentPageSubject.asObservable();
     totalPersons$ = this.totalPersonsSubject.asObservable();
+    accumulatedPersons$ = this.accumulatedPersonsSubject.asObservable();
 
     constructor() {
         this.setupRealtimeSubscription();
@@ -42,6 +44,8 @@ export class PersonService {
             )
             .subscribe();
     }
+
+   
 
     async fetchPersons(page: number = 1): Promise<void> {
         try {
@@ -71,13 +75,26 @@ export class PersonService {
             }
 
             // Set default memberType as 'coInvestor' if not provided
-            const personsWithDefaultType = persons?.map(person => ({
+            const processedPersons = persons?.map(person => ({
                 ...person,
                 member_type: mapToMemberType(person.member_type)
             })) || [];
 
+            // Update current page data
             this.currentPageSubject.next(page);
-            this.personsSubject.next(personsWithDefaultType as Person[]);
+            this.personsSubject.next(processedPersons);
+
+            // Update accumulated persons
+            const currentAccumulated = this.accumulatedPersonsSubject.value;
+            const newAccumulated = [...currentAccumulated];
+            
+            processedPersons.forEach(person => {
+                if (!newAccumulated.some(p => p.id === person.id)) {
+                    newAccumulated.push(person);
+                }
+            });
+            
+            this.accumulatedPersonsSubject.next(newAccumulated);
         } catch (error) {
             console.error('Error fetching persons:', error);
             throw error;
